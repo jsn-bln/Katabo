@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Address>
+
+@{
+	ViewData["Title"] = "Address book";
+	var i = 1;
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-3">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="User" asp-action="Index" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Account Details</a>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="User" asp-action="Address" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-light">Address Book</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="User" asp-action="Orders" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Orders</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="col-sm-9">
+			<div class="card shadow p-3">
+				<div class="d-flex justify-content-between">
+					<h4 class="card-title" style="color: #28A745">Address Book</h4>
+					<a asp-controller="User" asp-action="AddAddress" class="btn text-light align-self-end" style="background: #28A745; width: fit-content">
+						<i class="bi bi-plus-circle"></i> Add
+					</a>
+				</div>
+				<hr />
+				<table class="table">
+					<thead style="color: #28A745">
+						<tr>
+							<td>#</td>
+							<td>Barangay</td>
+							<td>City</td>
+							<td>Landmark</td>
+							<td>Postal code</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody class="text-muted">
+						@foreach(Address add in Model){
+							<tr>
+								<td>@i</td>
+								<td>@add.Barangay</td>
+								<td>@add.City</td>
+								<td>@add.Landmark</td>
+								<td>@add.Zipcode</td>
+								<td>
+									<div class="d-flex flex-column">
+										<a asp-controller="User" asp-action="EditAddress" asp-route-id="@add.AddressId"
+									   class="text-decoration-none" style="color: #28A745">
+											<i class="bi bi-pencil-square"></i>Edit
+										</a>
+										<a asp-controller="User" asp-action="DeleteAddress" asp-route-id="@add.AddressId"
+									   class="text-decoration-none" style="color:#D11A2A"><i class="bi bi-file-earmark-x"></i>Delete</a>
+									</div>
+								</td>
+							</tr>
+							i++;
+						}
+					</tbody>
+				</table>
+				<form asp-controller="User" asp-action="SetAddressDefault" method="post">
+					<label class="form-label">Default Address</label>
+					<div class="input-group" role="group">
+							<select class="form-select text-muted" name="AddressId">
+							@foreach(Address add in Model)
+							{
+								<option value="@add.AddressId">Brgy. @add.Barangay, Landmark - @add.Landmark</option>
+							}
+						</select>
+						<input value="@StaticClass.Userid" type="hidden" name="UserId"/>
+						<button class="btn text-light" type="submit" style="background: #FFB802">Select</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</div>

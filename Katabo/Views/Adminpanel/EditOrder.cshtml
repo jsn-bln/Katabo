@@ -1,0 +1,96 @@
+﻿@model Order
+
+@{
+	ViewData["title"] = "Update Order";
+}
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-black">Accounts</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Products" class="text-decoration-none text-black">Products</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-black">Categories</a>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="Adminpanel" asp-action="Orders" class="text-decoration-none text-light">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<div class="card p-3">
+				<form asp-action="EditOrder" method="post">
+					<h3 class="">Order Details</h3>
+					<hr/>
+					<p class="my-3 fw-bold">Customer</p>
+					<div class="m-4">
+						<label asp-for="Fullname" class="form-label">Customer Name</label>
+						<input asp-for="Fullname" class="form-control text-muted" type="text" value="@Model.Fullname" placeholder="@Model.Fullname" disabled />
+					</div>
+					
+					<p class="my-3 fw-bold">Shipment Address</p>
+					<div class="m-3 row">
+						<div class="col-sm-6">
+							<label class="form-label">Barangay</label>
+							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Barangay" placeholder="@ViewBag.ShipmentAdd.Barangay" disabled />
+						</div>
+						<div class="col-sm-6">
+							<label class="form-label">City</label>
+							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.City" placeholder="@ViewBag.ShipmentAdd.City" disabled />
+						</div>
+						
+					</div>
+
+					<div class="m-3 row">
+						<div class="col-sm-6">
+							<label class="form-label">Provice</label>
+							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Province" placeholder="@ViewBag.ShipmentAdd.Province" disabled />
+						</div>
+						<div class="col-sm-6">
+							<label class="form-label">Country</label>
+							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Country" placeholder="@ViewBag.ShipmentAdd.Country" disabled />
+						</div>
+					</div>
+					<div class="m-3">
+						<label class="form-label">Landmark</label>
+						<textarea class="text-muted form-control" placeholder="@ViewBag.ShipmentAdd.Landmark" disabled></textarea>
+					</div>
+					<div class="m-3">
+						<label class="form-label">Instructions</label>
+						<textarea class="text-muted form-control" placeholder="@Model.OrderInstruction" disabled></textarea>
+					</div>
+					<div class="m-3">
+						<label class="form-label">Status</label>
+						<select asp-for="Status" class="form-select text-muted">
+							@foreach (string stat in ViewBag.OrderStatus)
+							{
+								if (stat == Model.Status)
+								{
+									<option value="@stat" selected>@stat</option>
+								}
+								else
+								{
+									<option value="@stat">@stat</option>
+								}
+							}
+						</select>
+					</div>
+					
+					<input asp-for="OrderId" value="@Model.OrderId" type="hidden"/>
+
+					<button class="form-control btn w-25 text-light m-3" type="submit" style="background: #28A745">Save</button>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

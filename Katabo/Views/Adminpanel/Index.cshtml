@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+
+<div class="container w-25">
+    <div class="row">
+        <ul class="list-group">
+            <li class="list-unstyled list-group-item" style="background: #28A745">
+                <h class="cardcard-title text-light">Dashboard</h>
+
+            </li>
+            <li class="list-unstyled list-group-item">
+                <a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-black">Accounts</a>
+            </li>
+            <li class="list-unstyled list-group-item">
+                <a class="text-decoration-none text-black" href="#">Products</a>
+            </li>
+            <li class="list-unstyled list-group-item">
+                <a class="text-decoration-none text-black" href="#">Categories</a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿@model Product
+
+@{
+	ViewData["Title"] = Model.Name;
+}
+
+
+
+<div class="container">
+	<div class="row">
+
+		<div class="col-sm-12 col-lg-6 text-center align-items-center my-auto">
+			<img class="img-fluid" style="width: 250px; height: 200px" src="~/@Model.Image" alt="@Model.Name"/>
+		</div>
+		<div class="col-sm-12 col-lg-6 text-muted">
+			<div class="card shadow p-3 " style="background: #D9D9D9; border-radius: 10px">
+				<form method="post" enctype="multipart/form-data" asp-action="buynow" asp-route-productid="@Model.ProductId">
+					<h4 class="card-title" style="color: #5B5A5A">@Model.Name</h4>
+					<hr />
+					<p class="fw-bold">Size:</p>
+					<div class="w-100 mb-3">
+
+					<input type="radio" class="btn-check rd-btn" name="options" value="500g" id="option1" autocomplete="off">
+					<label class="p-2 mx-1 btn text-muted" for="option1" style="border: 1px solid grey">Approx. 500g</label>
+
+					<input type="radio" class="btn-check rd-btn" name="options" value="1kg" id="option2" autocomplete="off" checked>
+					<label class="p-2 mx-1 btn text-muted" for="option2" style="border: 1px solid grey">Approx. 1Kg</label>
+					</div>
+					<div>
+						<p class="fw-bold mb-0 mt-4">Product Description:</p>
+						<p class="mt-0">@Model.ProductDescription</p>
+					</div>
+					<p style="font-size: 1.5rem; font-weight: bold;color: #FD7D35">₱@Model.Price</p>
+					<span class ="fw-bold">Quantity</span>
+					<div class="input-group w-50">
+						<button type="button" class="btn" onclick="decrement()" name="decrement" style="border: 1px solid grey; background: #f9f9f9">
+						<i class="bi bi-dash-circle" style="color: #28A745"></i>
+						</button>
+						<input class="form-control" type="number" name="Qty" id="quantity" value="1" min="1" max="50" step="1">
+						<button type="button" class="btn" onclick="increment()" name="increment" style="background: #f9f9f9; border: 1px solid grey">
+							<i class="bi bi-plus-circle" style="color: #28A745"></i>
+						</button>
+					</div>
+					<button type="submit" class="btn text-light m-2" style="background: #28A745">Add to cart</button>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="my-5">
+	<h5>You may also like</h5>
+	<div class="d-flex justify-content-between">
+		@foreach (var obj in ViewBag.ProdsToShow)
+		{
+			<div class="card shadow text-center justify-content-center align-items-center m-2 p-2" style="width: 180px; height:270px;">
+				<img src="~/@obj.Image" alt="@obj.Name" style="width: 100px; height : 100px" />
+				<span style="font-weight: bold; color: #FFB802">@obj.Name</span>
+				<span class="text-muted">₱@obj.Price</span>
+				<br>
+				@if (obj.ProductQuantity <= 0)
+				{
+					<a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId"
+			   class="btn btn-primary p-2 disabled" style="background: #28A745; margin-bottom: 10px; border-radius: 10px">Sold out</a>
+				}
+				else
+				{
+					<a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId"
+			   class="btn btn-primary p-2" style="background: #28A745; margin-bottom: 10px; border-radius: 10px">Add to Cart</a>
+
+				}
+			</div>
+
+		}
+	</div>
+
+</div>

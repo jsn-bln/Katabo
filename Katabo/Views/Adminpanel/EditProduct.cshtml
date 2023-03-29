@@ -1,0 +1,71 @@
+﻿@model Product
+@{
+	ViewData["Title"] = "Dashboard";
+}
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-black">Accounts</a>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="Adminpanel" asp-action="Products" class="text-decoration-none text-light">Products</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-black">Categories</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a class="text-decoration-none text-black" href="#">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<div class="card shadow p-3">
+				<h4 class="" style="color: #28A745">Edit Product</h4>
+				<form asp-controller="Adminpanel" asp-action="EditProduct" enctype="multipart/form-data" method="post">
+					<div class="m-3">
+						<label asp-for="Name" class="form-label">Product name: </label>
+						<input asp-for="Name" class="form-control text-muted" placeholder="@Model.Name" name="Name"/>
+					</div>
+					<div class="m-3">
+						<label asp-for="ProductDescription" class="form-label">Product Description: </label>
+						<textarea asp-for="ProductDescription" class="text-muted form-control"
+							name="desc" >@Model.ProductDescription</textarea>
+					</div>
+					<div class="m-3">
+						<label asp-for="CategoryId">Category:</label>
+						<select asp-for="CategoryId" name="cate" class="text-muted form-select">
+							@foreach (Category cat in ViewBag.Cat)
+							{
+								<option class="text-muted" value="@cat.CategoryId">@cat.Name</option>
+							}
+						</select>
+					</div>
+					<div class="m-3">
+						<label asp-for="Price" >Price per kilo</label>
+						<input asp-for="Price" class="text-muted form-control" type="number" name="Price" placeholder="@Model.Price"/>
+					</div>
+					<div class="m-3">
+						<label asp-for="ProductQuantity">Quantity</label>
+						<input asp-for="ProductQuantity" class="text-muted form-control" type="number" name="Qty" placeholder="@Model.ProductQuantity" />
+					</div>
+					<div class="m-3">
+						<label asp-for="Image">Image</label>
+						<input asp-for="Image" class="text-muted form-control" type="file" placeholder="@Model.Image" />
+					</div>
+					<div class="m-3">
+						<button class="btn text-light form-control" style="background: #28A745">Edit</button>
+					</div>
+					<input asp-for="ProductId" type="hidden" placeholder="@Model.ProductId"/>
+					<input asp-for="Image" placeholder="@Model.Image" type="hidden"/>
+					
+				</form>
+			</div>
+		</div>
+</div>

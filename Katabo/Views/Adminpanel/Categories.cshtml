@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Category>
+
+@{
+	ViewData["Title"] = "Dashboard";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-black">Accounts</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Products" class="text-decoration-none text-black">Products</a>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-light">Categories</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Orders" class="text-decoration-none text-black">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<div class="card p-3">
+				<table class="table">
+					<thead>
+						<tr>
+							<th style="color: #28A745">Id</th>
+							<th style="color: #28A745">Product name</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (Category cat in Model)
+						{
+							<tr class="text-muted">
+								<td>
+									<a asp-controller="Adminpanel" asp-action="EditUser" asp-route-id="@cat.CategoryId"
+								   class="text-muted">@cat.CategoryId</a>
+								</td>
+								<td>@cat.Name</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

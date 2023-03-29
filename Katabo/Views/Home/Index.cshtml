@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Online Market";
+}
+
+
+<p></p>
+
+<div class="container d-flex justify-content-between" style="margin-bottom: 20px">
+    <div class="mx-2">
+        @Html.Partial("_SideBar")
+    </div>
+    <div>
+        @if (ViewBag.CategorySelected == null)
+        {
+            <img class="img-fluid mx-auto" src="/banner.png" />
+        }else if (ViewBag.CategorySelected == 1)
+        {
+            <img class="img-fluid mx-auto" src="/seafood-banner.png" />
+        }
+        else if (ViewBag.CategorySelected == 2)
+        {
+            <img class="img-fluid mx-auto" src="/meat-banner.png" />
+        }
+        else if (ViewBag.CategorySelected == 3)
+        {
+            <img class="img-fluid mx-auto" src="/vegetable-banner.png" />
+        }
+        else if (ViewBag.CategorySelected == 4)
+        {
+            <img class="img-fluid mx-auto" src="/fruits-banner.png" />
+        }
+        else if (ViewBag.CategorySelected == 5)
+        {
+            <img class="img-fluid mx-auto" src="/root-crops-banner.png" />
+        }
+
+
+        <header class="header" id="header">
+            <br />
+            <section class="section new-arrival">
+                <div class="title">
+                    @if(ViewBag.CategorySelected == null)
+                    {
+                        <h3 class="text-muted m-2">All Products</h3>
+                    }
+                    else{
+                        <h3 class="text-muted m-2">@ViewBag.CatName</h3>
+                    }
+                    </div>
+                <div class="d-flex flex-wrap product-items">
+                    @foreach (var obj in @Model)
+                    {
+                        <div class="card shadow text-center justify-content-center align-items-center m-1 p-2" style="width: 180px; height:270px;">
+                            <img src="~/@obj.Image" alt="@obj.Name" style="width: 100px; height : 100px" />
+                            <span style="font-weight: bold; color: #FFB802">@obj.Name</span>
+                            <span class="text-muted">₱@obj.Price</span>
+                            <br>
+                            @if (obj.ProductQuantity <= 0)
+                            {
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId"
+                                    class="btn btn-primary p-2 disabled" style="background: #28A745; margin-bottom: 10px; border-radius: 10px">Out of stock</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId" 
+                                    class="btn btn-primary p-2" style="background: #28A745; margin-bottom: 10px; border-radius: 10px">Add to Cart</a>
+
+                            }
+                        </div>
+
+                    }
+
+                </div>
+            </section>
+        </header>
+
+    </div>
+    
+</div>
+
+
+

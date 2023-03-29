@@ -1,0 +1,45 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+
+<div class="container p-5">
+    <div class="row">
+            <div class="col-sm-6 col-12">
+                <img class="img-fluid" src="~/logo_login.png"/>
+            </div>
+
+            <div class="col-sm-6 col-12">
+            <div class="card shadow p-2 align-items-center" style="border: 1px solid #137B2B">
+                    <h4 class="card-title" style="color: #137B2B">LOG IN</h4>
+                        <form id="account" method="post" asp-action="Login">
+                            <div class="my-2">
+                                <input  asp-for="Username" class="form-control w-100" autocomplete="username" 
+                                    aria-required="true" placeholder="Enter your email" />
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+
+                            <div class="my-2">
+                                <input asp-for="Password"  class="form-control w-100" autocomplete="current-password" 
+                                    aria-required="true" placeholder="Enter your password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <p style="color:red">@ViewBag.error</p>
+
+
+                        <button id="login-submit" type="submit" class="w-100 btn text-light" 
+                                style="background: #137B2B; border: none">Login now</button>
+                            <div class="cont-right">
+                                <span class="text-muted">
+                                    Dont have an account? 
+                                    <a asp-controller="userRegister" asp-action="Index" class="text-decoration-none"
+                                        style="color: #137B2B">Sign up</a>
+                                </span>
+                             </div><br />
+                        </form>
+                </div>
+            </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+﻿* {
+    font-family: 'Poppins', sans-serif;
+}
+nav {
+    height: fit-content;
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-mid {
+    background: #28A745;
+}
+
+.nav-top {
+    background: #137B2B;
+    height: 100%;
+}
+
+.nav-bottom {
+    -webkit-box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.46);
+    -moz-box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.46);
+    box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.46);
+}
+
+.search-btn {
+    background: #FFB802;
+}
+
+.menu-btn {
+    text-decoration: none;
+    list-style-type: none;
+    height: 100%;
+}
+
+.ft-p {
+    color: white !important;
+}
+
+h6 {
+    color: #FD7D35;
+    margin: 0;
+    padding: 0;
+}
+
+.ft-img {
+    width: 50px;
+    height: 50px;
+}
+
+.ft-bot, .ft-mid {
+    background: #F5F5F5;
+    width: 100%;
+}
+
+.ft-bot div a {
+    text-decoration: none;
+    color: grey;
+}
+
+.fg-search{
+    height: 50%;
+    align-self: center;
+    margin: 0;
+}
+.chat-icon {
+    font-size: 25px;
+    color: #FFB802;
+}
+
+.nav-top-icons{
+    color: white;
+    font-size: 15px;
+}
+.nav-bot-icons {
+    color: #FFB802;
+    font-size: 24px;
+}
+.ft-icons {
+    font-size: 50px;
+    color: #28A745;
+}
+.isactive {
+    color: white;
+    height: 100%;
+    background: #FFB802;
+}
+
+.isselected{
+    background: #f9f9f9;
+}
+
+.rd-btn:checked + label {
+    background-color: #f9f9f9;
+    border: 1px solid #28A745;
+}
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 768px) {
+    .ft-bot {
+        flex-direction: column;
+        height: auto;
+    }
+}

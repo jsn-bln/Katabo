@@ -1,0 +1,87 @@
+﻿@model User
+
+@{
+	ViewData["Title"] = "Dashboard";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-3">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="User" asp-action="Index" class="text-decoration-none text-light">Account Details</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="User" asp-action="Address" asp-route-id="@Model.UserId" class="text-decoration-none text-black">Address Book</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="User" asp-action="Orders" asp-route-id="@Model.UserId" class="text-decoration-none text-black">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-9">
+			<div class="card shadow p-3">
+				<div class="d-flex justify-content-between">
+					<h4 class="card-title" style="color: #28A745">Account Details</h4>
+					<a asp-controller="User" asp-action="EditAccount" asp-route-id="@Model.UserId" class="btn text-light align-self-end" style="background: #28A745; width: fit-content">
+						<i class="bi bi-pencil-square"></i> Edit
+					</a>
+				</div>
+				<hr />
+				<table class="table text-muted">
+					<tr>
+						<td>
+							First name
+						</td>
+						<td>
+							@Model.FirstName
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Last name
+						</td>
+						<td>
+							@Model.LastName
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Email Address
+						</td>
+						<td>
+							@Model.Email
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Phone number
+						</td>
+						<td>
+							@Model.PhoneNmber
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Gender
+						</td>
+						<td>
+							@Model.Gender
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Birthday
+						</td>
+						<td>
+							@Model.Birthday.ToString("MMMM dd yyyy")
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>	
+</div>

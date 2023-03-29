@@ -1,0 +1,99 @@
+﻿@model User
+
+@{
+	ViewData["Title"] = "Add account";
+}
+
+
+<div class="container p-5">
+	<div class="row gap">
+		<div class="col-sm-2">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-light">Accounts</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Products" class="text-decoration-none text-black">Products</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-black">Categories</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-black">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<div class="card p-4 shadow" style="border: 1px solid #137B2B">
+				<h3 class="card-title" style="color: #137B2B">Registration</h3>
+				<form asp-controller="userRegister" asp-action="Index" method="post">
+					<h4 class="text-muted">Add a new account.</h4>
+					<hr />
+					<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+					<div class="my-2">
+						<input asp-for="FirstName" type="text" class="form-control" id="w3lName" placeholder="Enter your first name" required="">
+						<span asp-validation-for="FirstName" class="text-danger"></span>
+					</div>
+
+					<div class="my-2">
+						<input asp-for="LastName" type="text" class="form-control" id="w3lName" placeholder="Enter your last name" required="">
+						<span asp-validation-for="LastName" class="text-danger"></span>
+					</div>
+
+					<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+					<div class="my-2">
+						<input asp-for="Email" class="form-control" autocomplete="username" aria-required="true"
+							   placeholder="Enter you email" />
+						<span asp-validation-for="Email" class="text-danger"></span>
+					</div>
+					<div class="my-2">
+						<input asp-for="Birthday" type="date" class="form-control text-muted" id="w3lName" placeholder="Enter your birthday" required="">
+						<span asp-validation-for="Birthday" class="text-danger"></span>
+
+					</div>
+
+					<div class="my-2">
+						<label class="text-muted">Gender: </label>
+						<select asp-for="Gender" class="text-muted form-select" id="SubjectList" name="gender">
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+						<span asp-validation-for="Gender" class="text-danger"></span>
+
+					</div>
+					<div class="my-2">
+						<label class="text-muted">Role: </label>
+						<select asp-for="Role" class="text-muted form-select" id="SubjectList" name="role">
+							<option value="User">User</option>
+							<option value="Admin">Admin</option>
+						</select>
+						<span asp-validation-for="Gender" class="text-danger"></span>
+
+					</div>
+
+					<div class="my-2">
+						<input asp-for="PhoneNmber" type="text" class="form-control" id="w3lName" placeholder="Enter your phone number" required="">
+						<span asp-validation-for="PhoneNmber" class="text-danger"></span>
+					</div>
+
+					<div class="my-2">
+						<input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Enter your password" />
+						<span asp-validation-for="Password" class="text-danger"></span>
+					</div>
+					<div class="my-2">
+						<input asp-for="cPassword" class="form-control" autocomplete="new-password" type="password" aria-required="true" placeholder="Confirm password" />
+						<span asp-validation-for="cPassword" class="text-danger"></span>
+					</div>
+					<button id="registerSubmit" type="submit" class="w-100 btn text-light" style="background: #137B2B">Register</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,20 @@
+﻿<ul class="list-group shadow">
+	<li class="list-group-item sidebar text-light" style="background: #28A745; font-weight: bold;">Product Categories</li>
+	@foreach (Category cat in ViewBag.Categories)
+	{
+		if (ViewBag.CategorySelected == cat.CategoryId)
+		{
+			<li class="list-group-item bar @ViewBag.@cat.Name.Replace(" ","").ToLower()"
+				style="background: #FFB802; border-left: 5px solid #28A745">
+				<a asp-controller="Category" asp-action="showProducts" asp-route-catid="@cat.CategoryId" class="text-decoration-none text-light">@cat.Name</a>
+			</li>
+		}
+		else
+		{
+			<li class="list-group-item bar @ViewBag.@cat.Name.Replace(" ","").ToLower()">
+				<a asp-controller="Category" asp-action="showProducts" asp-route-catid="@cat.CategoryId" class="text-decoration-none text-muted">@cat.Name</a>
+			</li>
+		}
+		
+	}
+</ul>

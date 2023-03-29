@@ -1,0 +1,82 @@
+﻿@model Address
+
+@{
+	ViewData["Title"] = "Add address";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-3">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="User" asp-action="Index" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Account Details</a>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="User" asp-action="Address" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-light">Address Book</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="User" asp-action="Orders" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Orders</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="col-sm-9">
+			<div class="card shadow p-3">
+				<h4 class="card-title" style="color: #28A745">Update address</h4>
+				<hr />
+				<form asp-controller="User" asp-action="AddAddress" method="post">
+					<div class="m-3">
+						<label asp-for="Barangay" class="form-label">Barangay </label>
+						<select asp-for="Barangay" class="text-muted form-select">
+							@{
+
+								foreach (string barangay in ViewBag.Barangays)
+								{
+									<option value="@barangay">@barangay</option>
+								}
+							}
+						</select>
+					</div>
+					<div class="m-3">
+						<label asp-for="Landmark">Landmark</label>
+						<textarea asp-for="Landmark" class="text-muted form-control" 
+							placeholder="Describe landmarks near your house e.g covered court, chruch, school."></textarea>
+					</div>
+					<div class="m-3">
+						<label asp-for="City" class="form-label">City</label>
+						<input asp-for="City" class="form-control" type="text" disabled value="Borogan City" placeholder="Borongan City" />
+						<input asp-for="City" type="hidden" value="Borongan City"/>
+					</div>
+					<div class="m-3">
+						<label asp-for="Province" class="form-label">Province</label>
+						<input asp-for="Province" class="form-control" type="text" disabled value="Eastern Samar" placeholder="Eastern Samar" />
+						<input asp-for="Province" type="hidden" value="Eastern Samar" />
+
+					</div>
+					<div class="m-3">
+						<label asp-for="Zipcode" class="form-label">Postal Code</label>
+						<input asp-for="Zipcode" class="form-control" type="text" disabled value="6800" placeholder="6800" />
+						<input asp-for="Zipcode" type="hidden" value="6800" />
+
+					</div>
+					<div class="m-3">
+						<label asp-for="Country" class="form-label">Country</label>
+						<input asp-for="Country" class="form-control" type="text" disabled value="Philippines" placeholder="Philippines" />
+						<input asp-for="Country" type="hidden" value="Philippines" />
+
+					</div>
+					<div class="m-3">
+						<input asp-for="UserId" class="form-control" type="hidden" value="@StaticClass.Userid"/>
+						<input asp-for="AddressId" class="form-control" type="hidden" value="@Model.AddressId" />
+						<button class="btn text-light form-control" type="submit" style="background: #28A745">Update</button>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>

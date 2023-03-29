@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Order>
+
+@{
+	ViewData["Title"] = "Orders";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-black">Accounts</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Products" class="text-decoration-none text-black">Products</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-black">Categories</a>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="Adminpanel" asp-action="Orders" class="text-decoration-none text-light">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<div class="card p-3">
+				<table>
+					<thead>
+						<tr>
+							<th style="color: #28A745">Id</th>
+							<th style="color: #28A745">Customer's name</th>
+							<th style="color: #28A745">Ref Id</th>
+							<th style="color: #28A745">Payment type</th>
+							<th style="color: #28A745">Status</th>
+							<th style="color: #28A745">Total</th>
+							<th style="color: #28A745">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach(Order ord in Model)
+						{
+							<tr class="text-muted">
+								<td>@ord.OrderId</td>
+								<td>@ord.Fullname</td>
+								<td>@ord.RefId</td>
+								<td>@ord.OrderType</td>
+								<td>@ord.Status</td>
+								<td>₱@ord.TotalAmount.ToString("0.00")</td>
+								<td>
+									<a asp-controller="Adminpanel" asp-action="EditOrder" asp-route-id="@ord.RefId"
+								   class="text-decoration-none" style="color:#FFB802">Update</a>
+								</td>
+							</tr>
+							
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

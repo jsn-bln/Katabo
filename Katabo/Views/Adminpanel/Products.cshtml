@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Product>
+
+
+@{
+	ViewData["Title"] = "Dashboard";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-black">Accounts</a>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="Adminpanel" asp-action="Products" class="text-decoration-none text-light">Products</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-black">Categories</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Orders" class="text-decoration-none text-black">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<div class="card p-3">
+				<a asp-controller="Adminpanel" asp-action="AddProduct" class="btn text-light align-self-end" style="background: #28A745; width: fit-content">
+					<i class="bi bi-plus-circle"></i> Add
+				</a>
+				<table class="table">
+					<thead>
+						<tr>
+							<th style="color: #28A745">Id</th>
+							<th style="color: #28A745">Product name</th>
+							<th style="color: #28A745">Price per unit/weight</th>
+							<th style="color: #28A745">Category</th>
+							<th style="color: #28A745">Quantity</th>
+							<th style="color: #28A745">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (Product prod in Model)
+						{
+							<tr class="text-muted">
+								<td>
+									<a asp-controller="Adminpanel" asp-action="EditProduct" asp-route-id="@prod.ProductId"
+								   class="text-muted">@prod.ProductId</a>
+								</td>
+								<td>@prod.Name</td>
+								<td>₱ @prod.Price.ToString()</td>
+								@foreach(Category cat in ViewBag.Cate)
+								{
+									if(cat.CategoryId == prod.CategoryId)
+									{
+										<td>@cat.Name</td>
+									}
+								}
+								<td>@prod.ProductQuantity.ToString()</td>
+									<td>
+										<div class="d-flex flex-column">
+											<a asp-controller="Adminpanel" asp-action="EditProduct" asp-route-id="@prod.ProductId"
+												class="text-decoration-none" style="color: #28A745">
+												<i class="bi bi-pencil-square"></i>Edit
+											</a>
+											<a asp-controller="Adminpanel" asp-action="DeleteProduct" asp-route-id="@prod.ProductId"
+												class="text-decoration-none" style="color:#D11A2A"><i class="bi bi-file-earmark-x"></i>Delete</a>
+										</div>
+									</td>
+							</tr>
+							
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

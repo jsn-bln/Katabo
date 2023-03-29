@@ -1,0 +1,136 @@
+﻿@model User
+@{
+	ViewData["Title"] = "Dashboard";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="Adminpanel" asp-action="Accounts" class="text-decoration-none text-light">Accounts</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Products" class="text-decoration-none text-black">Products</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a asp-controller="Adminpanel" asp-action="Categories" class="text-decoration-none text-black">Categories</a>
+				</li>
+				<li class="list-unstyled list-group-item">
+					<a class="text-decoration-none text-black">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<div class="card p-3 shadow">
+				<form asp-controller="Adminpanel" asp-action="updateAccount" method="post">
+					<h4 class="" style="color: #28A745">Edit details</h4>
+					<hr />
+					<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+					<div class="my-2">
+						<label asp-for="FirstName" class="form-label text-muted">First name</label>
+						<input asp-for="FirstName" type="text" name="Firstname" class="form-control text-muted" id="w3lName" placeholder="Enter your first name" required=""
+							value="@Model.FirstName" >
+						<span asp-validation-for="FirstName" class="text-danger"></span>
+					</div>
+
+					<div class="my-2">
+						<label asp-for="LastName" class="form-label text-muted">Last name</label>
+						<input asp-for="LastName" name="Lastname" type="text" class="form-control text-muted" id="w3lName" placeholder="Enter your last name" required=""
+					 		value="@Model.LastName" >
+						<span asp-validation-for="LastName" class="text-danger"></span>
+					</div>
+
+					<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+					<div class="my-2">
+						<label asp-for="Email" class="form-label text-muted">Email</label>
+						<input asp-for="Email" name="Email" class="form-control " autocomplete="username" aria-required="true"
+								placeholder="Enter you email" value="@Model.Email" disabled/>
+						<span asp-validation-for="Email" class="text-danger"></span>
+					</div>
+					<div class="my-2">
+						<label asp-for="Birthday" class="form-label text-muted">Birthday</label>
+						<input asp-for="Birthday" name="Birthday" type="date" class="form-control text-muted" id="w3lName" placeholder="Enter your birthday"
+							value="@Model.Birthday" >
+						<span asp-validation-for="Birthday" class="text-danger"></span>
+					</div>
+
+					<div class="my-2">
+						<label class="text-muted">Gender: </label>
+						<select asp-for="Gender" name="Gender" class="text-muted form-select" id="SubjectList">
+							@if(Model.Gender == "Male")
+							{
+								<option value="Male" selected>Male</option>
+								<option value="Female">Female</option>
+							}
+							else
+							{
+								<option value="Male">Male</option>
+								<option value="Female" selected>Female</option>
+							}
+
+						</select>
+						<span asp-validation-for="Gender" class="text-danger"></span>
+
+					</div>
+					<div class="my-2">
+						<label class="text-muted">Role: </label>
+						<select asp-for="Role" name="Role" class="text-muted form-select" id="SubjectList">
+							@if(Model.Role == "Admin")
+							{
+								<option value="Admin" selected="selected">Admin</option>
+								<option value="User">User</option>
+							}
+							else
+							{
+								<option value="Admin">Admin</option>
+								<option value="User" selected="selected">User</option>
+							}
+
+						</select>
+						<span asp-validation-for="Gender" class="text-danger"></span>
+
+					</div>
+
+					<div class="my-2">
+						<label asp-for="PhoneNmber" class="form-label text-muted">Phone number</label>
+
+						<input asp-for="PhoneNmber" name="Phonenumber" type="text" class="form-control" id="w3lName" placeholder="Enter your phone number" required=""
+							value="@Model.PhoneNmber" disabled>
+						<span asp-validation-for="PhoneNmber" class="text-danger"></span>
+					</div>
+
+
+					<p class="text-muted">Change password:</p>
+					<div class="my-2">
+						<input asp-for="Password" name="Password" class="form-control" autocomplete="new-password" placeholder="Enter your password"
+							   value="@Model.Password"/>
+						<span asp-validation-for="Password" class="text-danger"></span>
+					</div>
+					<div class="my-2">
+						<input asp-for="cPassword" name="cPassword" class="form-control" autocomplete="new-password" type="password" placeholder="Confirm password"
+							value="@Model.Password" />
+						<span asp-validation-for="cPassword" class="text-danger"></span>
+					</div>
+					
+					<input asp-for="UserId" name="UserId" type="hidden" value="@Model.UserId"/>
+					<input asp-for="AddressId" name="AddressId" type="hidden" value="@Model.AddressId" />
+
+
+
+
+
+
+					<button id="registerSubmit" type="submit" class="w-100 btn text-light" style="background: #137B2B">Edit</button>
+				
+
+				</form>	
+			</div>
+		</div>
+	</div>
+
+</div>
+

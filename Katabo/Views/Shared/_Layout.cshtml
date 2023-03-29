@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katabo</title>
+    <link rel="stylesheet" href="~/css/toastr.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/StyleSheet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Katabo.styles.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom sr-only box-shadow mb-3 d-flex flex-column">
+            <div class="container-fluid d-flex nav-top d-flex justify-content-between">
+                <div class="m-2">
+                    <i class="bi bi-envelope-fill nav-top-icons"></i>
+                    <a class="link-light text-decoration-none" href="mailto:kataboborongan@gmail.com">kataboborongan@gmail.com</a>
+                </div>
+                <div class="d-flex justify-content-evenly w-25 m-2">
+                    <a href="https://www.facebook.com/" target="_blank">
+                        <i class="bi bi-facebook nav-top-icons"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank">
+                        <i class="bi bi-twitter nav-top-icons"></i>
+                    </a>
+                    <a href="https://www.instagram.com/" target="_blank">
+                        <i class="bi bi-instagram nav-top-icons"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="container-fluid d-flex nav-mid align-items-center">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="~/nav-logo.png" width="150" height="50" alt="Katabo logo">
+                </a>
+
+                <div class="d-flex align-items-center">
+
+                    <form class="form-inline my-2 my-lg-0 d-flex" asp-action="Searchme">
+                        <div class="input-group fg-search">
+                            <input type="search" name="str" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                            <button type="submit" class="btn" style="background: #FFB802"><i class="bi bi-search text-light"></i></button>
+                        </div>
+
+                    </form>
+                    <a class="nav-link m-1 h-75" href="#">
+                        <i class="bi bi-chat-left-text-fill chat-icon"></i>
+                    </a>
+
+                </div>
+            </div>
+            <div class="container-fluid nav-bottom pb-0">
+                <div class="row justify-content-center w-100">
+                    <div class="col-sm-12 col-lg-6 text-center">
+                        <ul class="d-flex menu-btn flex-wrap justify-content-center justify-content-lg-start">
+                            <li><a asp-controller="Home" asp-action="Index" class="nav-link @ViewBag.Home">Home</a></li>
+                            <li><a asp-controller="Category" asp-action="Index" class="nav-link @ViewBag.Category">Category</a></li>
+                            <li><a asp-controller="About" asp-action="Index" class="nav-link @ViewBag.AboutUs">About us</a></li>
+                            <li><a asp-controller="Contact" asp-action="Index" class="nav-link @ViewBag.Contact">Contact</a></li>
+                            @if (StaticClass.Role == "Admin")
+                            {
+                                <li><a asp-controller="adminpanel" asp-action="Accounts" class="nav-link @ViewBag.AdminP">Admin Panel</a></li>
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 my-auto">
+                        <ul class="d-flex justify-content-center justify-content-lg-end menu-btn">
+
+                            @if (StaticClass.Userid == -1)
+                            {
+                                <li class="mx-3">
+                                    <a class="text-decoration-none text-black" href="/Userlogin">Login</a>
+                                </li>
+                                <li class="mx-3">
+                                    <a asp-controller="userRegister" asp-action="Index" class="text-decoration-none text-black">Register</a>
+                                </li>
+
+                            }
+                            else
+                            {
+                                <li class="mx-3">
+                                    <i class="bi bi-geo-alt-fill nav-bot-icons"></i>
+                                    <a asp-controller="User" asp-action="Address" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">@StaticClass.Address</a>
+                                </li>
+                                <li>
+                                    <div class="btn-group">
+                                        <i class="bi bi-person-fill nav-bot-icons"></i>
+                                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            @StaticClass.CurrentUser
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a asp-controller="User" asp-action="Index" asp-route-id="@StaticClass.Userid" class="dropdown-item">Profile</a></li>
+                                            <li>
+                                                <a class="text-decoration-none dropdown-item " asp-action="Logout" asp-controller="Userlogin">Logout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="mx-3">
+                                    <i class="bi bi-basket2-fill nav-bot-icons"></i>
+                                    <a class="text-decoration-none text-black" href="/Cart">
+                                        Cart
+                                        <span class="badge badge-pill badge-warning" style="background: #FFB802">@StaticClass.CartCount</span>
+                                    </a>
+                                </li>
+
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted" style="background: #28A745">
+        <div class="container d-flex justify-content-around vw-100 flex-wrap p-4">
+            <div class="align-items-center">
+                <h4 class="text-light">Sign up for Newsletters</h4>
+                <div class="d-flex">
+                    <p class="ft-p sr-only text-light mx-1">
+                        Get E-Mail updates about our latest shop and
+                    </p>
+                    <span>
+                        <a class="text-decoration-none" href="#" style=" color: #FFB802 ">Special Offers</a>
+                    </span>
+                </div>
+
+
+            </div>
+            <div>
+                <form class="form d-flex mt-2 align-items-center">
+                    <div class="input-group">
+                        <input type="search" class="form-control rounded" placeholder="Your email address" aria-label="Search" aria-describedby="search-addon" />
+                        <button type="button" class="btn search-btn text-light">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly p-4 ft-mid flex-wrap">
+            <div class="d-flex justify-content-evenly align-items-center justify-content-center">
+                <i class="bi bi-truck ft-icons"></i>
+                <div style="padding-left: 5px">
+                    <h6>Free and Fast Delivery</h6>
+                    <p>Free delivery at your neighborhood</p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-evenly align-items-center">
+                <i class="bi bi-hand-thumbs-up ft-icons"></i>
+                <div style="padding-left: 5px">
+                    <h6>100% Satisfaction Guarantee</h6>
+                    <p>Always above and beyond for our suki's</p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-evenly align-items-center">
+                <i class="bi bi-tag ft-icons"></i>
+                <div style="padding-left: 5px">
+                    <h6>Convenient Payment Options</h6>
+                    <p>Cash on Delivery and Pay Online</p>
+                </div>
+            </div>
+        </div>
+        <div class="ft-bot p-4 m-0 row gap-5">
+            <div class="d-flex flex-column col-6 col-sm-2">
+                <img class="img-fluid" src="~/footer-logo.png" style="width: 160px; height: 100px" />
+                <a href="tel:+61525230290">+61 525 230 290</a>
+                <a href="tel:09076231985">0907 623 1985</a>
+                <a class="text-decoration-none" href="mailto:kataboborongan@gmail.com" style="color: #28A745">kataboborongan@gmail.com</a>
+                <a href="#" style="color: #28A745">www.katabo.com</a>
+            </div>
+            <div class="d-flex flex-column col-2 col-sm-2">
+                <h5>CATEGORIES</h5>
+                <a href="#">Seafood</a>
+                <a href="#">Meat</a>
+                <a href="#">Vegetable</a>
+                <a href="#">Fruits</a>
+                <a href="#">Root crops</a>
+            </div>
+            <div class="d-flex flex-column col-2 col-sm-2">
+                <h5>ABOUT US</h5>
+                <a href="#">Katabo Policies</a>
+                <a href="#">Store Location</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="d-flex flex-column col-2 col-sm-2">
+                <h5>FOLLOW US</h5>
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+            <div class="d-flex flex-column col-2 col-sm-2">
+                <h5>PAYMENT</h5>
+                <a href="#">Gcash</a>
+                <a href="#">Cash on Delivery</a>
+            </div>
+
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("NToastNotify")
+</body>
+</html>

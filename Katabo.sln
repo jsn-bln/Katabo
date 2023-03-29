@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Katabo", "Katabo\Katabo.csproj", "{FD2F520D-CC41-4670-BF79-A9426959C2D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD2F520D-CC41-4670-BF79-A9426959C2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2F520D-CC41-4670-BF79-A9426959C2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2F520D-CC41-4670-BF79-A9426959C2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2F520D-CC41-4670-BF79-A9426959C2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8547F474-BA35-4C75-944A-BF37ECD3A557}
+	EndGlobalSection
+EndGlobal
