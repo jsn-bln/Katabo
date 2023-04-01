@@ -4,14 +4,14 @@
 	{
 		if (ViewBag.CategorySelected == cat.CategoryId)
 		{
-			<li class="list-group-item bar @ViewBag.@cat.Name.Replace(" ","").ToLower()"
+			<li class="list-group-item item"
 				style="background: #FFB802; border-left: 5px solid #28A745">
 				<a asp-controller="Category" asp-action="showProducts" asp-route-catid="@cat.CategoryId" class="text-decoration-none text-light">@cat.Name</a>
 			</li>
 		}
 		else
 		{
-			<li class="list-group-item bar @ViewBag.@cat.Name.Replace(" ","").ToLower()">
+			<li class="list-group-item item">
 				<a asp-controller="Category" asp-action="showProducts" asp-route-catid="@cat.CategoryId" class="text-decoration-none text-muted">@cat.Name</a>
 			</li>
 		}

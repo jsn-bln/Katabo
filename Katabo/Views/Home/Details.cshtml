@@ -4,7 +4,44 @@
 	ViewData["Title"] = Model.Name;
 }
 
+<script>
+	$(document).ready(function () {
+		// Get the decrement and increment buttons
+		var decrementButton = $('.decrement-btn');
+		var incrementButton = $('.increment-btn');
 
+		// Get the quantity input field
+		var quantityInput = $('#quantity');
+
+		// Add event listener for decrement button
+		decrementButton.click(function () {
+			var currentValue = parseInt(quantityInput.val());
+			if (currentValue > 1) {
+				quantityInput.val(currentValue - 1);
+			}
+		});
+
+		// Add event listener for increment button
+		incrementButton.click(function () {
+			var currentValue = parseInt(quantityInput.val());
+			if (currentValue < 50) {
+				quantityInput.val(currentValue + 1);
+			}
+		});
+
+
+
+		$('input[type="radio"][name="options"]').change(function () {
+			var price = @Model.Price;
+			if ($('#option1').is(':checked')) {
+				// Divide the price by 2 if option1 is selected
+				price = price / 2;
+			}
+			// Update the price in the UI
+			$('.price-value').text('₱' + price.toFixed(2));
+		});
+	});
+</script>
 
 <div class="container">
 	<div class="row">
@@ -19,25 +56,24 @@
 					<hr />
 					<p class="fw-bold">Size:</p>
 					<div class="w-100 mb-3">
+						<input type="radio" class="btn-check rd-btn" name="options" value="500g" id="option1" autocomplete="off">
+						<label class="p-2 mx-1 btn text-muted" for="option1" style="border: 1px solid grey">Approx. 500g</label>
 
-					<input type="radio" class="btn-check rd-btn" name="options" value="500g" id="option1" autocomplete="off">
-					<label class="p-2 mx-1 btn text-muted" for="option1" style="border: 1px solid grey">Approx. 500g</label>
-
-					<input type="radio" class="btn-check rd-btn" name="options" value="1kg" id="option2" autocomplete="off" checked>
-					<label class="p-2 mx-1 btn text-muted" for="option2" style="border: 1px solid grey">Approx. 1Kg</label>
+						<input type="radio" class="btn-check rd-btn" name="options" value="1kg" id="option2" autocomplete="off" checked>
+						<label class="p-2 mx-1 btn text-muted" for="option2" style="border: 1px solid grey">Approx. 1Kg</label>
 					</div>
 					<div>
 						<p class="fw-bold mb-0 mt-4">Product Description:</p>
 						<p class="mt-0">@Model.ProductDescription</p>
 					</div>
-					<p style="font-size: 1.5rem; font-weight: bold;color: #FD7D35">₱@Model.Price</p>
+					<p class="price-value" style="font-size: 1.5rem; font-weight: bold;color: #FD7D35">₱@Model.Price</p>
 					<span class ="fw-bold">Quantity</span>
 					<div class="input-group w-50">
-						<button type="button" class="btn" onclick="decrement()" name="decrement" style="border: 1px solid grey; background: #f9f9f9">
+						<button type="button" class="btn decrement-btn" name="decrement" style="border: 1px solid grey; background: #f9f9f9">
 						<i class="bi bi-dash-circle" style="color: #28A745"></i>
 						</button>
 						<input class="form-control" type="number" name="Qty" id="quantity" value="1" min="1" max="50" step="1">
-						<button type="button" class="btn" onclick="increment()" name="increment" style="background: #f9f9f9; border: 1px solid grey">
+						<button type="button" class="btn increment-btn" name="increment" style="background: #f9f9f9; border: 1px solid grey">
 							<i class="bi bi-plus-circle" style="color: #28A745"></i>
 						</button>
 					</div>

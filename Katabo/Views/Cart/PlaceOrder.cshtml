@@ -5,16 +5,64 @@
 	double amt = 0;
 }
 <style>
-	#shipment:checked{
+	#shipment1:checked{
+		background: #FFB802;
+	}
+
+	#shipment2:checked {
+		background: #FFB802;
+	}
+
+	#payment:checked {
 		background: #FFB802;
 	}
 
 </style>
+
+<script>
+	$(document).ready(function () {
+		$('input[type="radio"][name="shipment"]').change(function () {
+			var delivery = 0;
+			if ($('#shipment1').is(':checked')) {
+				delivery = 10;
+				$('input[type="radio"][name="payment"]').prop('disabled', false);
+			} else {
+				delivery = 0;
+				$('input[type="radio"][name="payment"]').prop('disabled', true);
+			}
+			$.ajax({
+				url: '/Cart/UpdateDelivery',
+				type: 'POST',
+				data: { delivery: delivery },
+				success: function (result) {
+					$('.delivery-value').text('₱' + delivery.toFixed(2));
+					location.reload();
+				},
+				error: function (xhr, status, error) {
+					alert('An error occurred while updating the delivery value.');
+				}
+			});
+		});
+
+		if (@StaticClass.Delivery == 10) {
+			$('#shipment1').prop('checked', true);
+			$('input[type="radio"][name="payment"]').prop('disabled', false);
+		} else {
+			$('#shipment2').prop('checked', true);
+			$('input[type="radio"][name="payment"]').prop('disabled', true);
+		}
+	});
+
+
+
+</script>
 <div class="container">
 	<div class="row">
 		<div class="col-sm-7">
+			<form asp-action="Buy" asp-route-id="@StaticClass.Userid" method="post">
+
 			<div class="card p-3">
-				<h4 class="card-title mb-4" style="color: #454545">Shipping Details</h4>
+				<h4 class="card-title mb-4 fw-bold" style="color: #454545">Shipping Details</h4>
 				<p style="color: #454545">Shipping Address</p>
 				<div class="w-75 mx-auto m-3 p-3" style="border: 1.5px solid #137B2B; border-radius: 5px">
 					<p>@Model.FirstName @Model.LastName</p>
@@ -26,21 +74,45 @@
 				<a asp-controller="User" asp-action="Address" asp-route-id="@Model.UserId" class="text-decoration-none" style="color:#FFB802">+ Add New Address</a>
 			</div>
 			<div class="card p-3 my-3">
-				<p class="card-title" style="color: #454545">Shipping Method</p>
+				<p class="card-title" style="color: #454545">Shipping Option</p>
 				<div class="form-check">
-					<input class="form-check-input" type="radio" name="shipment" id="shipment" checked>
+					<input class="form-check-input" type="radio" name="shipment" id="shipment1">
 					<label class="form-check-label" for="shipment" >
 						Shipping Method - ₱10 Delivery
 					</label>
 				</div>
-			</div>
-			<form asp-action="Payment" method="post">
-				<div class="card p-3 my-3">
-					<p class="card-title" style="color: #454545">Delivery Instructions</p>
-					<textarea class="form-control" id="instructions" name="instructions" placeholder="Enter custom instructions here."></textarea>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="shipment" id="shipment2">
+					<label class="form-check-label" for="shipment">
+						Pickup - Free
+					</label>
 				</div>
-				<button type="submit" class="btn text-light mx-auto" id="payment-btn" style="background: #28A745">PROCEED TO PAYMENT</button>
+			</div>
+			<div class="card p-3 my-3">
+				<p class="card-title" style="color: #454545">Delivery Instructions</p>
+				<textarea class="form-control" id="instructions" name="instructions" placeholder="Enter custom instructions here."></textarea>
+			</div>
+			<div class="card p-3">
+				<h4 class="fw-bold" style="color: #454545">Payment Option</h4>
+				<p class="text-muted">Please choose your payment method</p>
+				<div class="form-check m-2">
+						<input class="form-check-input" type="radio" name="payment" id="payment" value="gcash">
+					<label class="form-check-label" for="gcash">
+						<img class="img-fluid" src="~/gcash.png" />
+					</label>
+				</div>
+				<div class="form-check m-2">
+						<input class="form-check-input" type="radio" name="payment" id="payment" value="cod" checked>
+					<label class="form-check-label" for="flexRadioDefault2">
+						<img class="img-fluid" src="~/cod.png" />
+						<span>Cash on Delivery</span>
+					</label>
+				</div>
+				<p>@StaticClass.Instructions</p>
+			</div>
+			<button type="submit" class="btn text-light my-3" style="background: #28A745">PLACE ORDER</button>
 			</form>
+
 		</div>
 
 		<div class="col-sm-4">
@@ -70,7 +142,7 @@
 				</div>
 				<div class="d-flex justify-content-between text-muted">
 					<span>Shipping fee</span>
-					<span>₱10.00</span>
+					<span class="delivery-fee">₱@StaticClass.Delivery.ToString("0.00")</span>
 				</div>
 				<hr />
 				<div class="d-flex justify-content-between fw-bold">
@@ -81,4 +153,5 @@
 		</div>
 	</div>
 </div>
+
 

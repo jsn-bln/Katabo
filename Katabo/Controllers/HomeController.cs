@@ -98,7 +98,6 @@ namespace Katabo.Controllers
 				};
 
 				StaticClass.Amount= StaticClass.Amount + (Ord.price * Ord.qty);
-				StaticClass.Delivery = 10;
 				StaticClass.GrossAmount = StaticClass.Amount;
 				StaticClass.NetAmount =  StaticClass.Amount + StaticClass.Delivery;
 				StaticClass.myCart.Add(Ord);

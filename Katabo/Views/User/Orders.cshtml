@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Orders>
+﻿@model IEnumerable<Order>
 @{
-	ViewData["Title"] = "My Orders"
+	ViewData["Title"] = "My Orders";
 }
 
 <div class="container">
@@ -10,20 +10,20 @@
 				<li class="list-unstyled list-group-item" style="background: #28A745">
 					<h class="cardcard-title text-light">Dashboard</h>
 				</li>
-				<li class="list-unstyled list-group-item">
+				<li class="list-unstyled list-group-item item">
 					<a asp-controller="User" asp-action="Index" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Account Details</a>
 				</li>
-				<li class="list-unstyled list-group-item">
+				<li class="list-unstyled list-group-item item">
 					<a asp-controller="User" asp-action="Address" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Address Book</a>
 				</li>
-				<li class="list-unstyled list-group-item" style="background: #FFB802; border-left: 5px solid #28A745">
+				<li class="list-unstyled list-group-item item" style="background: #FFB802; border-left: 5px solid #28A745">
 					<a asp-controller="User" asp-action="Orders" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-light">Orders</a>
 				</li>
 			</ul>
 		</div>
 		<div class="col-sm-9">
 			<div class="card p-3">
-				<table>
+				<table class="table">
 					<thead>
 						<tr>
 							<th style="color: #28A745">Ref Id</th>
@@ -34,6 +34,30 @@
 							<th style="color: #28A745">Action</th>
 						</tr>
 					</thead>
+					
+					<tbody class="text-muted">				
+						@foreach(Order ord in Model)
+						{
+							<tr>
+								<td>@ord.RefId</td>
+								<td>@ord.OrderDate.ToString("MM/dd/yyyy")</td>
+								@foreach (Address add in ViewBag.Adds)
+								{
+									if(ord.ShippingAddressId == add.AddressId)
+									{
+										<td>Brgy. @add.Barangay - @add.City</td>
+										break;
+									}
+
+								}
+								<td>@ord.Status</td>
+								<td>₱@ord.TotalAmount.ToString("0.00")</td>
+								<td>
+									<a asp-controller="User" asp-action="OrderDetails" asp-route-id="@ord.OrderId" class="text-decoration-none" style="color: #28A745">Details</a>
+								</td>
+							</tr>
+						}
+					</tbody>
 				</table>
 			</div>
 		</div>

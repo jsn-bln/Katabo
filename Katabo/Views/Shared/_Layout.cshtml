@@ -57,21 +57,21 @@
             </div>
             <div class="container-fluid nav-bottom pb-0">
                 <div class="row justify-content-center w-100">
-                    <div class="col-sm-12 col-lg-6 text-center">
-                        <ul class="d-flex menu-btn flex-wrap justify-content-center justify-content-lg-start">
-                            <li><a asp-controller="Home" asp-action="Index" class="nav-link @ViewBag.Home">Home</a></li>
-                            <li><a asp-controller="Category" asp-action="Index" class="nav-link @ViewBag.Category">Category</a></li>
-                            <li><a asp-controller="About" asp-action="Index" class="nav-link @ViewBag.AboutUs">About us</a></li>
-                            <li><a asp-controller="Contact" asp-action="Index" class="nav-link @ViewBag.Contact">Contact</a></li>
+                    <div class="col-sm-12 col-lg-6 text-center navbar">
+                        <ul class="d-flex menu-btn flex-wrap justify-content-center justify-content-lg-start navbar-nav my-0 py-0">
+                            <li><a asp-controller="Home" asp-action="Index" class="nav-link n-link @ViewBag.Home">Home</a></li>
+                            <li><a asp-controller="Category" asp-action="Index" class="nav-link n-link @ViewBag.Category">Category</a></li>
+                            <li><a asp-controller="About" asp-action="Index" class="nav-link n-link @ViewBag.AboutUs">About us</a></li>
+                            <li><a asp-controller="Contact" asp-action="Index" class="nav-link n-link @ViewBag.Contact">Contact</a></li>
                             @if (StaticClass.Role == "Admin")
                             {
-                                <li><a asp-controller="adminpanel" asp-action="Accounts" class="nav-link @ViewBag.AdminP">Admin Panel</a></li>
+                                <li><a asp-controller="adminpanel" asp-action="Accounts" class="nav-link n-link @ViewBag.AdminP">Admin Panel</a></li>
                             }
 
                         </ul>
                     </div>
                     <div class="col-sm-12 col-lg-6 my-auto">
-                        <ul class="d-flex justify-content-center justify-content-lg-end menu-btn">
+                        <ul class="d-flex justify-content-center justify-content-lg-end menu-btn navbar-nav">
 
                             @if (StaticClass.Userid == -1)
                             {
@@ -85,10 +85,14 @@
                             }
                             else
                             {
-                                <li class="mx-3">
-                                    <i class="bi bi-geo-alt-fill nav-bot-icons"></i>
-                                    <a asp-controller="User" asp-action="Address" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">@StaticClass.Address</a>
-                                </li>
+                                @if(StaticClass.Role != "Admin")
+                                {
+                                    <li class="mx-3">
+                                        <i class="bi bi-geo-alt-fill nav-bot-icons"></i>
+                                        <a asp-controller="User" asp-action="Address" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">@StaticClass.Address</a>
+                                    </li>
+                                }
+
                                 <li>
                                     <div class="btn-group">
                                         <i class="bi bi-person-fill nav-bot-icons"></i>

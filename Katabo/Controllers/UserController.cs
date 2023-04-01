@@ -4,7 +4,14 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
 using NToastNotify;
+using RestSharp;
 using System.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using Microsoft.CodeAnalysis;
+using System.Security.Principal;
 
 namespace Katabo.Controllers
 {
@@ -172,6 +179,9 @@ namespace Katabo.Controllers
 			return RedirectToAction("Address", "User", new { id = user.UserId });
 		}
 
+
+		// -------------------------------- ORDERS --------------------------------------------------
+
 		[HttpGet]
 		public IActionResult Orders(int id)
 		{
@@ -181,12 +191,99 @@ namespace Katabo.Controllers
 			ViewBag.Contact = "text-black";
 			ViewBag.AdminP = "text-black";
 
+			List<Address> adds = new List<Address>();
+
 			var orders = _db.Orders.Where(o => o.UserId == id).ToList();
+			
+			foreach(Order ord in orders)
+			{
+				var add = _db.Addresses.FirstOrDefault(a => a.AddressId == ord.ShippingAddressId);
+				adds.Add(add);
+			}
+
+			ViewBag.Adds = adds;
+
+
+			foreach(Order order in orders)
+			{
+				if (order.Status == "unpaid" && order.OrderType == "GCASH")
+				{
+					var paymentid = order.PaymentId;
+					var client = new RestClient($"https://api.paymongo.com/v1/links/{paymentid}");
+					var request = new RestRequest(Method.GET);
+					request.AddHeader("accept", "application/json");
+					request.AddHeader("authorization", "Basic c2tfdGVzdF9EZWp4R1VtY3ZwNW1BTlZmemtERVRYQlc6");
+					IRestResponse response = client.Execute(request);
+
+					var responseObject = JsonConvert.DeserializeObject<dynamic>(response.Content);
+
+					var status = responseObject.data.attributes.status;
+
+					Order temp = new Order
+					{
+						OrderId = order.OrderId,
+						UserId = order.UserId,
+						Fullname = order.Fullname,
+						OrderDate = order.OrderDate,
+						TotalAmount = order.TotalAmount,
+						ShippingAddressId = order.ShippingAddressId,
+						BillingAddressId = order.BillingAddressId,
+						IsShipped = false,
+						RefId = order.RefId,
+						PaymentId = order.PaymentId,
+						Status = status,
+						OrderType = order.OrderType,
+						OrderInstruction = order.OrderInstruction
+
+					};
+					_db.Update(temp);
+					_db.SaveChanges();
+				}
+				
+			}
 
 
 
 
 			return View(orders);
+		}
+
+
+		[HttpGet]
+		public IActionResult OrderDetails(int id)
+		{
+			ViewBag.Category = "text-black";
+			ViewBag.Home = "text-black";
+			ViewBag.AboutUs = "text-black";
+			ViewBag.Contact = "text-black";
+			ViewBag.AdminP = "text-black";
+
+			var order = _db.Orders.FirstOrDefault(od => od.OrderId == id);
+			var add = _db.Addresses.FirstOrDefault(a => a.AddressId == order.ShippingAddressId);
+
+			ViewBag.Add = add;
+
+
+			if(order.OrderType == "GCASH" && order.Status == "unpaid")
+			{
+				var paymentid = order.PaymentId;
+				var client = new RestClient($"https://api.paymongo.com/v1/links/{paymentid}");
+				var request = new RestRequest(Method.GET);
+				request.AddHeader("accept", "application/json");
+				request.AddHeader("authorization", "Basic c2tfdGVzdF9EZWp4R1VtY3ZwNW1BTlZmemtERVRYQlc6");
+				IRestResponse response = client.Execute(request);
+
+				var responseObject = JsonConvert.DeserializeObject<dynamic>(response.Content);
+
+				var checkoutUrl = responseObject.data.attributes.checkout_url;
+				ViewBag.CheckoutUrl = checkoutUrl;
+
+
+			}
+
+
+
+			return View(order);
 		}
 	}
 }

@@ -1,0 +1,93 @@
+﻿@model Order
+@{
+	ViewData["Title"] = "Order Details";
+	var add = ViewBag.Add;
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-3">
+			<ul class="list-group">
+				<li class="list-unstyled list-group-item" style="background: #28A745">
+					<h class="cardcard-title text-light">Dashboard</h>
+				</li>
+				<li class="list-unstyled list-group-item item">
+					<a asp-controller="User" asp-action="Index" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Account Details</a>
+				</li>
+				<li class="list-unstyled list-group-item item">
+					<a asp-controller="User" asp-action="Address" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-black">Address Book</a>
+				</li>
+				<li class="list-unstyled list-group-item item" style="background: #FFB802; border-left: 5px solid #28A745">
+					<a asp-controller="User" asp-action="Orders" asp-route-id="@StaticClass.Userid" class="text-decoration-none text-light">Orders</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-9">			
+			<div class="card p-3 text-muted">
+				<h3 class="card-title text-muted">Order Details</h3>
+				<hr />
+				
+				<div class="row m-1">
+					<div class="col-sm-6">
+						<label class="form-label">Reference Number</label>
+						<input class="form-control" type="text" disabled placeholder="@Model.RefId" />
+					</div>
+					<div class="col-sm-6">					
+						<label class="form-label">Status</label>
+						<input class="form-control" type="text" disabled placeholder="@Model.Status" />
+					</div>
+				</div>
+
+				<div class="row mx-1 my-2">
+					<label>Shipping Address</label>
+					<div class="col-sm-6">
+						<label class="form-label">Barangay</label>
+						<input class="form-control" type="text" disabled placeholder="Brgy. @add.Barangay"/>
+					</div>
+					<div class="col-sm-6">
+						<label class="form-label">City</label>
+						<input class="form-control" type="text" disabled placeholder="@add.City" />
+					</div>
+				</div>
+				<div class="row mx-1 my-2">
+					<div class="col-sm-6">
+						<label class="form-label">Province</label>
+						<input class="form-control" type="text" disabled placeholder="@add.Province" />
+					</div>
+					<div class="col-sm-6">
+						<label class="form-label">Zip Code</label>
+						<input class="form-control" type="text" disabled placeholder="@add.Zipcode" />
+					</div>
+					<div class="col-sm-12 my-2">
+						<label class="form-label">Landmark</label>
+						<textarea class="form-control text-muted" disabled>@add.Landmark</textarea>
+					</div>
+					<div class="col-sm-12 my-2">
+						<label class="form-label">Order Instructions</label>
+						<textarea class="form-control text-muted" disabled>@Model.OrderInstruction</textarea>
+					</div>
+				</div>
+				<div class="row mx-1 my-2">
+					<div class="col-sm-6">
+						<label class="form-label">Order Method</label>
+						<div class="d-flex">
+							<input class="form-control" type="text" disabled placeholder="@Model.OrderType" />
+							@if(Model.OrderType == "GCASH" && Model.Status == "unpaid")
+							{
+								<a class="btn text-light" style="background: #28A745; margin-left: 5px" href="@ViewBag.CheckoutUrl">Pay now</a>
+							}
+						</div>
+						
+
+					</div>
+					<div class="col-sm-5">
+					</div>
+				</div>
+				
+
+
+			</div>
+			
+		</div>
+	</div>
+</div>

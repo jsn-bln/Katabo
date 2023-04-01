@@ -185,9 +185,11 @@ namespace Katabo.Controllers
 		public IActionResult Buy(int id)
 		{
 			string paymentOption = Request.Form["payment"];
+			string payOp = StaticClass.Delivery == 10 ? paymentOption : "PICKUP";
 			var account = _db.Users.FirstOrDefault(u => u.UserId == id);
 			var toPay = StaticClass.NetAmount;
-
+			StaticClass.Instructions = Request.Form["instructions"];
+			 
 			if (paymentOption == "gcash")
 			{
 				var client = new RestClient("https://api.paymongo.com/v1/links");
@@ -232,7 +234,7 @@ namespace Katabo.Controllers
 						RefId = refid,
 						PaymentId = paymentid,
 						Status = status,
-						OrderType = paymentOption.ToUpper(),
+						OrderType = payOp.ToUpper(),
 						OrderInstruction = StaticClass.Instructions
 
 					};
@@ -279,7 +281,7 @@ namespace Katabo.Controllers
 				}
 
 			}
-			else if(paymentOption == "cod" || paymentOption == "pickup")
+			else
 			{
 				String refid = GenerateRefId(10);
 				String paymentid = GenerateRefId(10);
@@ -296,7 +298,7 @@ namespace Katabo.Controllers
 					RefId = refid,
 					PaymentId = paymentid,
 					Status = "unpaid",
-					OrderType = paymentOption.ToUpper(),
+					OrderType = payOp.ToUpper(),
 					OrderInstruction = StaticClass.Instructions
 
 				};
@@ -363,6 +365,15 @@ namespace Katabo.Controllers
 			ViewBag.ErrorMessage = errorMessage;
 			return View();
 		}
+
+		[HttpPost]
+		public JsonResult UpdateDelivery(int delivery)
+		{
+			StaticClass.Delivery = delivery;
+			StaticClass.NetAmount = StaticClass.Amount + StaticClass.Delivery;
+			return Json(new { success = true });
+		}
+
 
 
 
