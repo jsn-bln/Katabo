@@ -37,11 +37,13 @@ namespace Katabo.Controllers
 			for (int x = 0; x < StaticClass.myCart.Count; x++)
 			{
 				int myid = StaticClass.myCart[x].ID;
-				int myqty = StaticClass.myCart[x].qty;
+				int myqtyfull = StaticClass.myCart[x].qtyFull;
+				int myqtyhalf = StaticClass.myCart[x].qtyHalf;
+
 				if (myid == id)
 				{
 					StaticClass.CartCount = StaticClass.CartCount - 1;
-					StaticClass.Amount = StaticClass.Amount - (StaticClass.myCart[x].price * myqty);
+					StaticClass.Amount = StaticClass.Amount - ((StaticClass.myCart[x].price * myqtyfull) + (StaticClass.myCart[x].price * myqtyhalf));
 					if(StaticClass.Amount <= 0)
 					{
 						StaticClass.Amount = 0;
@@ -50,7 +52,7 @@ namespace Katabo.Controllers
 					}
 					else
 					{
-						StaticClass.NetAmount = StaticClass.NetAmount - (StaticClass.myCart[x].price * myqty);
+						StaticClass.NetAmount = StaticClass.NetAmount - ((StaticClass.myCart[x].price * myqtyfull) + (StaticClass.myCart[x].price * myqtyhalf));
 					}
 
 					StaticClass.myCart.RemoveAt(x);
@@ -252,8 +254,8 @@ namespace Katabo.Controllers
 							OrderId = ord.OrderId,
 							ProductId = prod.ID,
 							ProductName = prod.Name,
-							Quantity = prod.qty,
-							Total = prod.price * prod.qty
+							Quantity = prod.qtyFull + (prod.qtyHalf),
+							Total = (prod.price * prod.qtyFull) + ((prod.price/2) * prod.qtyHalf)
 
 						};
 						_db.OrderItems.Add(temp);
@@ -316,8 +318,8 @@ namespace Katabo.Controllers
 						OrderId = ord.OrderId,
 						ProductId = prod.ID,
 						ProductName = prod.Name,
-						Quantity = prod.qty,
-						Total = prod.price * prod.qty
+						Quantity = prod.qtyFull + (prod.qtyHalf),
+						Total = (prod.price * prod.qtyFull) + ((prod.price / 2) * prod.qtyHalf)
 
 					};
 					_db.OrderItems.Add(temp);

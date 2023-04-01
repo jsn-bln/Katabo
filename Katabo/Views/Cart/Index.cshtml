@@ -25,7 +25,7 @@
                     <tbody>
                     @foreach (var product in Model)
                     {
-                        amt = (product.price * product.qty);
+                                amt = (product.price * product.qtyFull) + ((product.price/2) * product.qtyHalf);
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center">
@@ -34,7 +34,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span>@product.qty</span>
+                                <span>@(product.qtyFull + product.qtyHalf)</span>
                             </td>
                             <td>
                                 <span class="fw-bold">₱@amt.ToString("0.00")</span>

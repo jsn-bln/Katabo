@@ -84,22 +84,49 @@ namespace Katabo.Controllers
 				var prdct = _db.Products.Where(x => x.ProductId == productid).FirstOrDefault();
 				StaticClass.CartCount++;
 
-				var price = portion == "1kg" ? prdct.Price : prdct.Price/2;
-			
+
+				int half, full;
+
+				if(portion == "1kg")
+				{
+					half = 0;
+					full = int.Parse(qty);
+				}
+				else
+				{
+					half = int.Parse(qty);
+					full = 0;
+				}
+
+
 				Cart Ord = new Cart
 				{
 					productid = productid,
-					price = price,
-					qty = int.Parse(qty),
+					price = prdct.Price,
+					qtyFull = full,
+					qtyHalf = half,
 					Image = prdct.Image,
 					Name = prdct.Name,
 					ID = StaticClass.CartCount,
 					Userid = StaticClass.Userid
 				};
 
-				StaticClass.Amount= StaticClass.Amount + (Ord.price * Ord.qty);
+				StaticClass.Amount= StaticClass.Amount + ((Ord.price * Ord.qtyFull) + ((Ord.price/2) * Ord.qtyHalf));
 				StaticClass.GrossAmount = StaticClass.Amount;
 				StaticClass.NetAmount =  StaticClass.Amount + StaticClass.Delivery;
+
+				foreach(Cart o in StaticClass.myCart)
+				{
+					if(o.productid == Ord.productid)
+					{
+						o.qtyFull += Ord.qtyFull;
+						o.qtyHalf += Ord.qtyHalf;
+						StaticClass.CartCount--;
+						_toastNotification.AddSuccessToastMessage(prdct.Name + " added to cart!");
+						return RedirectToAction("Index");
+					}
+				}
+				
 				StaticClass.myCart.Add(Ord);
 
 				_toastNotification.AddSuccessToastMessage(prdct.Name + " added to cart!");

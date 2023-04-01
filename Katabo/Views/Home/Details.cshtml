@@ -6,14 +6,13 @@
 
 <script>
 	$(document).ready(function () {
-		// Get the decrement and increment buttons
 		var decrementButton = $('.decrement-btn');
 		var incrementButton = $('.increment-btn');
 
-		// Get the quantity input field
+	
 		var quantityInput = $('#quantity');
 
-		// Add event listener for decrement button
+	
 		decrementButton.click(function () {
 			var currentValue = parseInt(quantityInput.val());
 			if (currentValue > 1) {
@@ -21,7 +20,7 @@
 			}
 		});
 
-		// Add event listener for increment button
+	
 		incrementButton.click(function () {
 			var currentValue = parseInt(quantityInput.val());
 			if (currentValue < 50) {

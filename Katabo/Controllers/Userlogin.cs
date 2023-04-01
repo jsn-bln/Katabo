@@ -117,7 +117,7 @@ namespace Katabo.Controllers
 					StaticClass.myCart = JsonConvert.DeserializeObject<List<Cart>>(cart.CartJson);
 					foreach(Cart obj in StaticClass.myCart)
 					{
-						StaticClass.Amount += (obj.price * obj.qty);
+						StaticClass.Amount += (obj.price * obj.qtyFull) + ((obj.price/2) * obj.qtyHalf);
 					}
 					StaticClass.NetAmount = StaticClass.Amount + 10;
 					StaticClass.CartCount = StaticClass.myCart.Count;
