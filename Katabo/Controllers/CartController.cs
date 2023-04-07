@@ -16,6 +16,9 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IO;
 
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+
 namespace Katabo.Controllers
 {
 	public class CartController : Controller
@@ -98,24 +101,29 @@ namespace Katabo.Controllers
 		[HttpGet]
 		public IActionResult PlaceOrder(int id)
 		{
-			var account = _db.Users.FirstOrDefault(u => u.UserId == id);
-			var deliveryAddress = _db.Addresses.FirstOrDefault(a => a.AddressId == account.AddressId);
-
-			ViewBag.Category = "text-black";
-			ViewBag.Home = "text-black";
-			ViewBag.AboutUs = "text-black";
-			ViewBag.Contact = "text-black";
-			ViewBag.AdminP = "text-black";
-			ViewBag.ShippingAdd = deliveryAddress;
-
-			if (StaticClass.myCart.Count <= 0)
+			if(StaticClass.Userid > 0)
 			{
-				_toastNotification.AddErrorToastMessage("Your cart is empty!");
-				return RedirectToAction("Index", "Cart");
+				var account = _db.Users.FirstOrDefault(u => u.UserId == id);
+				var deliveryAddress = _db.Addresses.FirstOrDefault(a => a.AddressId == account.AddressId);
+
+				ViewBag.Category = "text-black";
+				ViewBag.Home = "text-black";
+				ViewBag.AboutUs = "text-black";
+				ViewBag.Contact = "text-black";
+				ViewBag.AdminP = "text-black";
+				ViewBag.ShippingAdd = deliveryAddress;
+
+				if (StaticClass.myCart.Count <= 0)
+				{
+					_toastNotification.AddErrorToastMessage("Your cart is empty!");
+					return RedirectToAction("Index", "Cart");
+				}
+
+
+				return View(account);
 			}
-
-
-			return View(account);
+			return RedirectToAction("GuestView", "Home");
+			
 		}
 
 		[HttpPost]
@@ -182,27 +190,63 @@ namespace Katabo.Controllers
 
 		}
 
+		
 
-		[HttpPost]
+		[AcceptVerbs("GET", "POST")]
 		public IActionResult Buy(int id)
 		{
-			string paymentOption = Request.Form["payment"];
+			string paymentOption = "";
+			dynamic account;
+
+			try
+			{
+				paymentOption = Request.Form["instructions"];
+			}catch(InvalidOperationException e)
+			{
+				paymentOption = StaticClass.payop;
+			}
 			string payOp = StaticClass.Delivery == 10 ? paymentOption : "PICKUP";
-			var account = _db.Users.FirstOrDefault(u => u.UserId == id);
+
+			if(StaticClass.guest != null)
+			{
+				account = _db.Guests.FirstOrDefault(g => g.GuestId == id);
+			}
+			else
+			{
+				account = _db.Users.FirstOrDefault(u => u.UserId == id);
+			}
+
+			var accountType = "";
+			if (account is User)
+			{
+				accountType = "User";
+			}
+			else if (account is Guest)
+			{
+				accountType = "Guest";
+			}
+
 			var toPay = StaticClass.NetAmount;
-			StaticClass.Instructions = Request.Form["instructions"];
-			 
+			try
+			{
+				StaticClass.Instructions = Request.Form["instructions"];
+			}catch(InvalidOperationException e)
+			{
+
+			}
+
+
 			if (paymentOption == "gcash")
 			{
 				var client = new RestClient("https://api.paymongo.com/v1/links");
 				var request = new RestRequest(Method.POST);
 				request.AddHeader("accept", "application/json");
 				request.AddHeader("content-type", "application/json");
-				request.AddHeader("authorization", "Basic c2tfdGVzdF9EZWp4R1VtY3ZwNW1BTlZmemtERVRYQlc6");
+				request.AddHeader("authorization", "Basic c2tfdGVzdF9iMzdyemM2UUwzbnVDeTJabmRudGdqZEU6");
 
 				var amount = StaticClass.NetAmount * 100;
 				var description = account.FirstName + " " + account.LastName + " order";
-				var remarks = account.FirstName + " " + account.LastName + " order";
+				var remarks = StaticClass.Instructions;
 
 				if(StaticClass.NetAmount < 100)
 				{
@@ -226,12 +270,13 @@ namespace Katabo.Controllers
 					Order order = new Order
 					{
 						OrderId = 0,
-						UserId = account.UserId,
+						AccountId = id,
+						AccountType = accountType,
 						Fullname = account.FirstName + " " + account.LastName,
 						OrderDate = DateTime.Now,
 						TotalAmount = (decimal)StaticClass.NetAmount,
-						ShippingAddressId = (int)account.AddressId,
-						BillingAddressId = (int)account.AddressId,
+						ShippingAddressId = account.AddressId ?? 0,
+						BillingAddressId = account.AddressId ?? 0,
 						IsShipped = false,
 						RefId = refid,
 						PaymentId = paymentid,
@@ -273,9 +318,13 @@ namespace Katabo.Controllers
 					StaticClass.Amount = 0;
 					StaticClass.Delivery = 0;
 					StaticClass.CartCount = 0;
+					StaticClass.guest = null;
+					StaticClass.Address = null;
+					StaticClass.payop = "";
 
+					Task.Run(() => StaticClass.SendSms("Your order is being prepared, you will be notified when its being delivered ", "+16476875884"));
 					return Redirect(checkoutUrl);
-					
+
 				}
 				else
 				{
@@ -290,12 +339,13 @@ namespace Katabo.Controllers
 				Order order = new Order
 				{
 					OrderId = 0,
-					UserId = account.UserId,
+					AccountId = id,
+					AccountType = accountType,
 					Fullname = account.FirstName + " " + account.LastName,
 					OrderDate = DateTime.Now,
 					TotalAmount = (decimal)StaticClass.NetAmount,
-					ShippingAddressId = (int)account.AddressId,
-					BillingAddressId = (int)account.AddressId,
+					ShippingAddressId = account.AddressId ?? 0,
+					BillingAddressId = account.AddressId ?? 0,
 					IsShipped = false,
 					RefId = refid,
 					PaymentId = paymentid,
@@ -328,6 +378,17 @@ namespace Katabo.Controllers
 
 				_db.SaveChanges();
 
+				if(StaticClass.Delivery > 0)
+				{
+					StaticClass.SendSms("Your order is being prepared, you will be notified when its being delivered ", "+16476875884");
+				}
+				else
+				{
+					StaticClass.SendSms("Your order is being prepared, you will be notified when its ready for pickup ", "+16476875884");
+
+				}
+
+
 				StaticClass.myCart.Clear();
 				StaticClass.GrossAmount = 0;
 				StaticClass.NetAmount = 0;
@@ -335,6 +396,14 @@ namespace Katabo.Controllers
 				StaticClass.Delivery = 0;
 				StaticClass.CartCount = 0;
 				StaticClass.Instructions = "";
+				StaticClass.guest = null;
+				StaticClass.Address = null;
+				StaticClass.payop = "";
+
+
+
+
+
 
 				_toastNotification.AddSuccessToastMessage("Order placed successfuly");
 				return RedirectToAction("Index","Home");

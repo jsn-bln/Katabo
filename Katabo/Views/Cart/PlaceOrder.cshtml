@@ -46,10 +46,19 @@
 
 		if (@StaticClass.Delivery == 10) {
 			$('#shipment1').prop('checked', true);
-			$('input[type="radio"][name="payment"]').prop('disabled', false);
+			$('input[type="radio"][id="cod"]').prop('disabled', false);
+			$('input[type="radio"][id="cod"]').prop('checked', true);
+			$("#pat-option").prop("hidden", true);
+			$("#ship-add").prop("hidden", false);
+
+
 		} else {
 			$('#shipment2').prop('checked', true);
-			$('input[type="radio"][name="payment"]').prop('disabled', true);
+			$('input[type="radio"][id="cod"]').prop('disabled', true);
+			$('input[type="radio"][id="pat"]').prop('checked', true);
+			$("#pat-option").prop("hidden", false);
+			$("#ship-add").prop("hidden", true);
+
 		}
 	});
 
@@ -61,7 +70,7 @@
 		<div class="col-sm-7">
 			<form asp-action="Buy" asp-route-id="@StaticClass.Userid" method="post">
 
-			<div class="card p-3">
+			<div class="card p-3" id="ship-add">
 				<h4 class="card-title mb-4 fw-bold" style="color: #454545">Shipping Details</h4>
 				<p style="color: #454545">Shipping Address</p>
 				<div class="w-75 mx-auto m-3 p-3" style="border: 1.5px solid #137B2B; border-radius: 5px">
@@ -96,18 +105,25 @@
 				<h4 class="fw-bold" style="color: #454545">Payment Option</h4>
 				<p class="text-muted">Please choose your payment method</p>
 				<div class="form-check m-2">
-						<input class="form-check-input" type="radio" name="payment" id="payment" value="gcash">
+						<input class="form-check-input" type="radio" name="payment" id="gcash" value="gcash">
 					<label class="form-check-label" for="gcash">
 						<img class="img-fluid" src="~/gcash.png" />
 					</label>
 				</div>
 				<div class="form-check m-2">
-						<input class="form-check-input" type="radio" name="payment" id="payment" value="cod" checked>
+						<input class="form-check-input" type="radio" name="payment" id="cod" value="cod" checked>
 					<label class="form-check-label" for="flexRadioDefault2">
 						<img class="img-fluid" src="~/cod.png" />
 						<span>Cash on Delivery</span>
 					</label>
 				</div>
+					<div class="form-check m-2" id="pat-option" hidden>
+						<input class="form-check-input" type="radio" name="payment" id="pat" value="pat" checked>
+						<label class="form-check-label" for="flexRadioDefault2">
+							<i class="bi bi-shop" style="color: #28A745"></i>
+							<span>Pay at Counter</span>
+						</label>
+					</div>
 				<p>@StaticClass.Instructions</p>
 			</div>
 			<button type="submit" class="btn text-light my-3" style="background: #28A745">PLACE ORDER</button>

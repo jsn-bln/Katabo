@@ -20,6 +20,8 @@ namespace Katabo.Models
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<User> Users { get; set; }
 		public DbSet<ShoppingCarts> Carts { get; set; }
+		public DbSet<Guest> Guests { get; set; }
+
 
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,0 +1,208 @@
+﻿@model GuestData
+
+@{
+	ViewData["Title"] = "Sign in options";
+	double amt = 0;
+
+}
+
+<script>
+	$(document).ready(function () {
+		$('input[type="radio"][name="shipment"]').change(function () {
+			var delivery = 0;
+			if ($('#shipment1').is(':checked')) {
+				delivery = 10;
+				$('input[type="radio"][id="cod"]').prop('disabled', true);
+			} else {
+				delivery = 0;
+				$('input[type="radio"][id="cod"]').prop('disabled', false);
+			}
+			$.ajax({
+				url: '/Cart/UpdateDelivery',
+				type: 'POST',
+				data: { delivery: delivery },
+				success: function (result) {
+					$('.delivery-value').text('₱' + delivery.toFixed(2));
+					location.reload();
+				},
+				error: function (xhr, status, error) {
+					alert('An error occurred while updating the delivery value.');
+				}
+			});
+		});
+
+		if (@StaticClass.Delivery == 10) {
+			$('#shipment1').prop('checked', true);
+			$('input[type="radio"][id="cod"]').prop('disabled', false);
+			$('input[type="radio"][id="cod"]').prop('checked', true);
+			$("#pat-option").prop("hidden", true);
+			$("#ship-add").prop("hidden", false);
+
+
+		} else {
+			$('#shipment2').prop('checked', true);
+			$('input[type="radio"][id="cod"]').prop('disabled', true);
+			$('input[type="radio"][id="pat"]').prop('checked', true);
+			$("#pat-option").prop("hidden", false);
+			$("#ship-add").prop("hidden", true);
+
+		}
+	});
+
+
+
+</script>
+
+<div class="container">
+	<div class="row mx-auto">
+		<div class="col-sm-8">
+			<form asp-controller="Home" asp-action="GuestView" method="post">
+				<div class="card shadow p-3">
+					<h4 style="color: #28A745">Quick Checkout</h4>
+					<hr />
+					<h5>Customer Details</h5>
+					<div class="m-1">
+						<label asp-for="guest.FirstName">First name</label>
+						<input asp-for="guest.FirstName" class="form-control" type="text" required />
+					</div>
+					<div class="m-1">
+						<label asp-for="guest.LastName">Last name</label>
+						<input asp-for="guest.LastName" class="form-control" type="text" required />
+					</div>
+					<div class="m-1">
+						<label asp-for="guest.PhoneNumber">Phone number</label>
+						<input asp-for="guest.PhoneNumber" class="form-control" type="text" required />
+					</div>
+					<hr />
+					<div class="m-1">
+						<p class="card-title fw-bold" style="color: #454545">Shipping Option</p>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="shipment" id="shipment1">
+							<label class="form-check-label" for="shipment">
+								Shipping Method - ₱10 Delivery
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="shipment" id="shipment2">
+							<label class="form-check-label" for="shipment">
+								Pickup - Free
+							</label>
+						</div>
+					</div>
+					<div id="ship-add">
+						<h5>Shipping Address</h5>
+						<div class="row m-1">
+							<div class="col-sm-6">
+								<label asp-for="address.Barangay">Barangay</label>
+								<select asp-for="address.Barangay" class="text-muted form-select">
+									@{
+
+										foreach (string barangay in ViewBag.Barangays)
+										{
+											<option value="@barangay">@barangay</option>
+										}
+									}
+								</select>
+							</div>
+							<div class="col-sm-6">
+								<label asp-for="address.City">City</label>
+								<input asp-for="address.City" class="form-control text-muted" type="text" value="Borongan City" readonly />
+							</div>
+						</div>
+						<div class="row m-1">
+							<div class="col-sm-6">
+								<label asp-for="address.Province">Province</label>
+								<input asp-for="address.Province" class="form-control text-muted" type="text" value="Eastern Samar" readonly/>
+
+							</div>
+							<div class="col-sm-6">
+								<label asp-for="address.Zipcode">Zipcode</label>
+								<input asp-for="address.Zipcode" class="form-control text-muted" type="text" value="6800"  readonly/>
+							</div>
+							<div class="m-1">
+								<label asp-for="address.Landmark">Landmark</label>
+								<textarea asp-for="address.Landmark" class="form-control" placeholder="Beside the barangay hall .. etc.."></textarea>
+							</div>
+							<div class="p-3">
+								<p class="card-title" style="color: #454545">Delivery Instructions</p>
+								<textarea class="form-control" id="instructions" name="instructions" placeholder="Enter custom instructions here."></textarea>
+							</div>
+							<input asp-for="address.Country" type="hidden" value="Philippines" />
+						</div>
+					</div>
+					
+
+				</div>
+				<div class="card shadow p-3 my-3">
+					<h4 class="fw-bold" style="color: #454545">Payment Option</h4>
+					<p class="text-muted">Please choose your payment method</p>
+					<div class="form-check m-2">
+						<input class="form-check-input" type="radio" name="payment" id="gcash" value="gcash">
+						<label class="form-check-label" for="gcash">
+							<img class="img-fluid" src="~/gcash.png" />
+						</label>
+					</div>
+					<div class="form-check m-2">
+						<input class="form-check-input" type="radio" name="payment" id="cod" value="cod" checked>
+						<label class="form-check-label" for="flexRadioDefault2">
+							<img class="img-fluid" src="~/cod.png" />
+							<span>Cash on Delivery</span>
+						</label>
+					</div>
+					<div class="form-check m-2" id="pat-option" hidden>
+						<input class="form-check-input" type="radio" name="payment" id="pat" value="pat" checked>
+						<label class="form-check-label" for="flexRadioDefault2">
+							<i class="bi bi-shop" style="color: #28A745"></i>
+							<span>Pay at Counter</span>
+						</label>
+					</div>
+				</div>
+				
+				<button type="submit" class="btn text-light" style="background: #28A745">Place Order</button>
+			
+			</form>
+		</div>
+			<div class="col-sm-4">
+				<div class="card p-3">
+				<p>Order Summary</p>
+				<span class="text-muted">@StaticClass.CartCount Items(s) in Cart</span>
+				<hr />
+
+				@foreach (var item in StaticClass.myCart)
+				{
+					amt = (item.price * item.qtyFull) + (item.price * item.qtyHalf);
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<img class="img-fluid" src="~/@item.Image" style="width: 50px; height: 50px" />
+								<span style="color: #FD7D35; margin-left:10px">@item.Name</span>
+							</div>
+							<div class="fw-bold">
+								₱@amt.ToString("0.00")
+							</div>
+						</div>
+
+				}
+				<hr />
+				<div class="d-flex justify-content-between fw-bold">
+					<span>Subtotal</span>
+					<span>₱@StaticClass.Amount.ToString("0.00")</span>
+				</div>
+				<div class="d-flex justify-content-between text-muted">
+					<span>Shipping fee</span>
+					<span>₱@StaticClass.Delivery.ToString("0.00")</span>
+				</div>
+				<hr />
+				<div class="d-flex justify-content-between fw-bold">
+					<span>Order Total:</span>
+					<span>₱@StaticClass.NetAmount.ToString("0.00")</span>
+				</div>
+				<hr />
+				<div>
+					<div class="fw-bold">Estimated Delivery Time</div>
+					<div class="text-muted">@DateTime.Today.ToString("MMMM. dd, yyyy")</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+		

@@ -6,13 +6,14 @@ namespace Katabo.Models
     {
         [Key]
         public int OrderId { get; set; }
-        public int UserId { get; set; }
+        public int AccountId { get; set; }
+        public string AccountType { get; set; }
         public string  Fullname { get; set; }
 
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public int ShippingAddressId { get; set; }
-        public int BillingAddressId { get; set; }
+        public int? ShippingAddressId { get; set; }
+        public int? BillingAddressId { get; set; }
         public bool IsShipped { get; set; }
         public string? RefId { get; set; }
         public string? PaymentId { get; set; }

@@ -2,6 +2,7 @@
 
 @{
 	ViewData["title"] = "Update Order";
+	double total = 0;
 }
 
 
@@ -31,39 +32,78 @@
 				<form asp-action="EditOrder" method="post">
 					<h3 class="">Order Details</h3>
 					<hr/>
+					<p class="my-3 fw-bold">Items</p>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Product Name</th>
+								<th>Quantity</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (OrderItem oi in ViewBag.OrderItems)
+							{
+							total += oi.Total;
+							<tr>
+								<td>@oi.ProductName</td>
+								<td>@oi.Quantity</td>
+								<td>₱@oi.Total.ToString("0.00")</td>
+							</tr>
+							}
+							@if (Model.OrderType != "PICKUP")
+							{
+								total = total + 10;
+								<tr>
+									<td></td>
+									<td>Delivery:</td>
+									<td>₱10.00</td>
+								</tr>
+							}
+							<tr>
+								<td></td>
+								<td>Net Amount:</td>
+								<td>₱@total.ToString("0.00")</td>
+							</tr>
+						</tbody>
+					</table>
 					<p class="my-3 fw-bold">Customer</p>
 					<div class="m-4">
 						<label asp-for="Fullname" class="form-label">Customer Name</label>
 						<input asp-for="Fullname" class="form-control text-muted" type="text" value="@Model.Fullname" placeholder="@Model.Fullname" disabled />
 					</div>
 					
-					<p class="my-3 fw-bold">Shipment Address</p>
-					<div class="m-3 row">
-						<div class="col-sm-6">
-							<label class="form-label">Barangay</label>
-							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Barangay" placeholder="@ViewBag.ShipmentAdd.Barangay" disabled />
-						</div>
-						<div class="col-sm-6">
-							<label class="form-label">City</label>
-							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.City" placeholder="@ViewBag.ShipmentAdd.City" disabled />
-						</div>
-						
-					</div>
+					@if(ViewBag.ShipmentAdd != null)
+					{
+						<p class="my-3 fw-bold">Shipment Address</p>
+						<div class="m-3 row">
+							<div class="col-sm-6">
+								<label class="form-label">Barangay</label>
+								<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Barangay" placeholder="@ViewBag.ShipmentAdd.Barangay" disabled />
+							</div>
+							<div class="col-sm-6">
+								<label class="form-label">City</label>
+								<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.City" placeholder="@ViewBag.ShipmentAdd.City" disabled />
+							</div>
 
-					<div class="m-3 row">
-						<div class="col-sm-6">
-							<label class="form-label">Provice</label>
-							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Province" placeholder="@ViewBag.ShipmentAdd.Province" disabled />
 						</div>
-						<div class="col-sm-6">
-							<label class="form-label">Country</label>
-							<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Country" placeholder="@ViewBag.ShipmentAdd.Country" disabled />
+
+						<div class="m-3 row">
+							<div class="col-sm-6">
+								<label class="form-label">Provice</label>
+								<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Province" placeholder="@ViewBag.ShipmentAdd.Province" disabled />
+							</div>
+							<div class="col-sm-6">
+								<label class="form-label">Country</label>
+								<input class="form-control" type="text" placeholder="@ViewBag.ShipmentAdd.Country" placeholder="@ViewBag.ShipmentAdd.Country" disabled />
+							</div>
 						</div>
-					</div>
-					<div class="m-3">
-						<label class="form-label">Landmark</label>
-						<textarea class="text-muted form-control" placeholder="@ViewBag.ShipmentAdd.Landmark" disabled></textarea>
-					</div>
+						<div class="m-3">
+							<label class="form-label">Landmark</label>
+							<textarea class="text-muted form-control" placeholder="@ViewBag.ShipmentAdd.Landmark" disabled></textarea>
+						</div>
+					}
+					
 					<div class="m-3">
 						<label class="form-label">Instructions</label>
 						<textarea class="text-muted form-control" placeholder="@Model.OrderInstruction" disabled></textarea>

@@ -55,10 +55,10 @@
 
                 </div>
             </div>
-            <div class="container-fluid nav-bottom pb-0">
+            <div class="container-fluid nav-bottom">
                 <div class="row justify-content-center w-100">
-                    <div class="col-sm-12 col-lg-6 text-center navbar">
-                        <ul class="d-flex menu-btn flex-wrap justify-content-center justify-content-lg-start navbar-nav my-0 py-0">
+                    <div class="col-sm-12 col-lg-6 text-center" style="height: 100%">
+                        <ul class="d-flex menu-btn flex-wrap justify-content-center justify-content-lg-start navbar-nav" style="height: 100%">
                             <li><a asp-controller="Home" asp-action="Index" class="nav-link n-link @ViewBag.Home">Home</a></li>
                             <li><a asp-controller="Category" asp-action="Index" class="nav-link n-link @ViewBag.Category">Category</a></li>
                             <li><a asp-controller="About" asp-action="Index" class="nav-link n-link @ViewBag.AboutUs">About us</a></li>
@@ -71,16 +71,27 @@
                         </ul>
                     </div>
                     <div class="col-sm-12 col-lg-6 my-auto">
-                        <ul class="d-flex justify-content-center justify-content-lg-end menu-btn navbar-nav">
+                        <ul class="d-flex justify-content-center justify-content-lg-end menu-btn navbar-nav flex-grow-1">
 
                             @if (StaticClass.Userid == -1)
                             {
-                                <li class="mx-3">
-                                    <a class="text-decoration-none text-black" href="/Userlogin">Login</a>
+                                <li class="">
+                                    <a class="text-decoration-none text-black nav-link" href="/Userlogin">Login</a>
                                 </li>
-                                <li class="mx-3">
-                                    <a asp-controller="userRegister" asp-action="Index" class="text-decoration-none text-black">Register</a>
+                                <li class="">
+                                    <a asp-controller="userRegister" asp-action="Index" class="text-decoration-none text-black nav-link">Register</a>
                                 </li>
+                                @if (StaticClass.CartCount > 0)
+                                {
+                                    <li class="mx-3">
+                                        <i class="bi bi-basket2-fill nav-bot-icons"></i>
+                                        <a class="text-decoration-none text-black" href="/Cart">
+                                            Cart
+                                            <span class="badge badge-pill badge-warning" style="background: #FFB802">@StaticClass.CartCount</span>
+                                        </a>
+                                    </li>
+                                }
+                               
 
                             }
                             else
@@ -107,14 +118,14 @@
                                         </ul>
                                     </div>
                                 </li>
-                                <li class="mx-3">
+                                
+                                <li class="">
                                     <i class="bi bi-basket2-fill nav-bot-icons"></i>
                                     <a class="text-decoration-none text-black" href="/Cart">
                                         Cart
                                         <span class="badge badge-pill badge-warning" style="background: #FFB802">@StaticClass.CartCount</span>
                                     </a>
                                 </li>
-
                             }
                         </ul>
                     </div>

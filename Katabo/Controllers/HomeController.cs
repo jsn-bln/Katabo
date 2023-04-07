@@ -1,6 +1,7 @@
 ﻿using Katabo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using NToastNotify;
 using System;
 
@@ -10,10 +11,14 @@ namespace Katabo.Controllers
 	{
 		private readonly KataboContext _db;
 		private readonly IToastNotification _toastNotification;
-		public HomeController(KataboContext db, IToastNotification toastNotification)
+		private readonly IWebHostEnvironment _hostEnvironment;
+
+		public HomeController(KataboContext db, IToastNotification toastNotification, IWebHostEnvironment hostEnvironment)
 		{
 			_db = db;
 			_toastNotification = toastNotification;
+			_hostEnvironment = hostEnvironment;
+
 			if (StaticClass.myCart == null)
 			{
 				StaticClass st = new StaticClass();
@@ -77,65 +82,61 @@ namespace Katabo.Controllers
 		[HttpPost]
 		public IActionResult buynow(int productid)
 		{
-			if (StaticClass.Userid > 0)
+	
+			
+			string qty = Request.Form["Qty"];
+			string portion = Request.Form["options"];
+			var prdct = _db.Products.Where(x => x.ProductId == productid).FirstOrDefault();
+			StaticClass.CartCount++;
+
+
+			int half, full;
+
+			if(portion == "1kg")
 			{
-				string qty = Request.Form["Qty"];
-				string portion = Request.Form["options"];
-				var prdct = _db.Products.Where(x => x.ProductId == productid).FirstOrDefault();
-				StaticClass.CartCount++;
-
-
-				int half, full;
-
-				if(portion == "1kg")
-				{
-					half = 0;
-					full = int.Parse(qty);
-				}
-				else
-				{
-					half = int.Parse(qty);
-					full = 0;
-				}
-
-
-				Cart Ord = new Cart
-				{
-					productid = productid,
-					price = prdct.Price,
-					qtyFull = full,
-					qtyHalf = half,
-					Image = prdct.Image,
-					Name = prdct.Name,
-					ID = StaticClass.CartCount,
-					Userid = StaticClass.Userid
-				};
-
-				StaticClass.Amount= StaticClass.Amount + ((Ord.price * Ord.qtyFull) + ((Ord.price/2) * Ord.qtyHalf));
-				StaticClass.GrossAmount = StaticClass.Amount;
-				StaticClass.NetAmount =  StaticClass.Amount + StaticClass.Delivery;
-
-				foreach(Cart o in StaticClass.myCart)
-				{
-					if(o.productid == Ord.productid)
-					{
-						o.qtyFull += Ord.qtyFull;
-						o.qtyHalf += Ord.qtyHalf;
-						StaticClass.CartCount--;
-						_toastNotification.AddSuccessToastMessage(prdct.Name + " added to cart!");
-						return RedirectToAction("Index");
-					}
-				}
-				
-				StaticClass.myCart.Add(Ord);
-
-				_toastNotification.AddSuccessToastMessage(prdct.Name + " added to cart!");
-				return RedirectToAction("Index");
+				half = 0;
+				full = int.Parse(qty);
 			}
 			else
 			{
-				return RedirectToAction("Index","Userlogin");
+				half = int.Parse(qty);
+				full = 0;
 			}
+
+
+			Cart Ord = new Cart
+			{
+				productid = productid,
+				price = prdct.Price,
+				qtyFull = full,
+				qtyHalf = half,
+				Image = prdct.Image,
+				Name = prdct.Name,
+				ID = StaticClass.CartCount,
+				Userid = StaticClass.Userid
+			};
+
+			StaticClass.Amount= StaticClass.Amount + ((Ord.price * Ord.qtyFull) + ((Ord.price/2) * Ord.qtyHalf));
+			StaticClass.GrossAmount = StaticClass.Amount;
+			StaticClass.NetAmount =  StaticClass.Amount + StaticClass.Delivery;
+
+			foreach(Cart o in StaticClass.myCart)
+			{
+				if(o.productid == Ord.productid)
+				{
+					o.qtyFull += Ord.qtyFull;
+					o.qtyHalf += Ord.qtyHalf;
+					StaticClass.CartCount--;
+					_toastNotification.AddSuccessToastMessage(prdct.Name + " added to cart!");
+					return RedirectToAction("Index");
+				}
+			}
+				
+			StaticClass.myCart.Add(Ord);
+
+			_toastNotification.AddSuccessToastMessage(prdct.Name + " added to cart!");
+			return RedirectToAction("Index");
+		
 		}
 
 		[HttpGet]
@@ -171,6 +172,43 @@ namespace Katabo.Controllers
 			return View(prod);
 		}
 
+		[HttpGet]
+		public IActionResult GuestView()
+		{
+			string contentRootPath = _hostEnvironment.ContentRootPath;
+			string[] barangays = System.IO.File.ReadAllLines(Path.Combine(contentRootPath, "wwwroot/Barangays.txt"));
+			ViewBag.Barangays = barangays;
+
+
+			return View(new GuestData());
+		}
+		[HttpPost]
+		public IActionResult GuestView(GuestData gd)
+		{
+			Guest guest = gd.guest;
+			Address add = gd.address;
+
+			if(StaticClass.Delivery != 0)
+			{
+				_db.Addresses.Add(add);
+				guest.AddressId = add.AddressId;
+			}
+			
+			_db.Guests.Add(guest);
+
+			_db.SaveChanges();
+
+			StaticClass.guest = guest;
+			StaticClass.add = add;
+
+			StaticClass.Instructions = Request.Form["instructions"];
+
+			StaticClass.payop = Request.Form["payment"];
+
+
+			return RedirectToAction("Buy", "Cart", new { id = guest.GuestId}, "POST");
+
+		}
 	}
 
 }

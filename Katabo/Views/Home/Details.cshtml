@@ -17,10 +17,11 @@
 			var currentValue = parseInt(quantityInput.val());
 			if (currentValue > 1) {
 				quantityInput.val(currentValue - 1);
+				
 			}
+			
 		});
 
-	
 		incrementButton.click(function () {
 			var currentValue = parseInt(quantityInput.val());
 			if (currentValue < 50) {
@@ -32,12 +33,13 @@
 
 		$('input[type="radio"][name="options"]').change(function () {
 			var price = @Model.Price;
+			var currentValue = parseInt(quantityInput.val());
 			if ($('#option1').is(':checked')) {
 				// Divide the price by 2 if option1 is selected
 				price = price / 2;
 			}
 			// Update the price in the UI
-			$('.price-value').text('₱' + price.toFixed(2));
+			$('.price-value').text('₱' + (price.toFixed(2) * currentValue));
 		});
 	});
 </script>

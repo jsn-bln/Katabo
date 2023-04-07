@@ -4,6 +4,7 @@ using Katabo.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Katabo.Migrations
 {
     [DbContext(typeof(KataboContext))]
-    partial class KataboContextModelSnapshot : ModelSnapshot
+    [Migration("20230407170457_optionalshipaddorders")]
+    partial class optionalshipaddorders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,35 +114,35 @@ namespace Katabo.Migrations
                         new
                         {
                             CategoryId = 1,
-                            CreatedDateTime = new DateTime(2023, 4, 7, 14, 40, 50, 109, DateTimeKind.Local).AddTicks(6145),
+                            CreatedDateTime = new DateTime(2023, 4, 7, 13, 4, 57, 254, DateTimeKind.Local).AddTicks(4479),
                             DisplayOrder = 1,
                             Name = "Seafoods"
                         },
                         new
                         {
                             CategoryId = 2,
-                            CreatedDateTime = new DateTime(2023, 4, 7, 14, 40, 50, 109, DateTimeKind.Local).AddTicks(6151),
+                            CreatedDateTime = new DateTime(2023, 4, 7, 13, 4, 57, 254, DateTimeKind.Local).AddTicks(4483),
                             DisplayOrder = 2,
                             Name = "Meat"
                         },
                         new
                         {
                             CategoryId = 3,
-                            CreatedDateTime = new DateTime(2023, 4, 7, 14, 40, 50, 109, DateTimeKind.Local).AddTicks(6157),
+                            CreatedDateTime = new DateTime(2023, 4, 7, 13, 4, 57, 254, DateTimeKind.Local).AddTicks(4487),
                             DisplayOrder = 3,
                             Name = "Vegetables"
                         },
                         new
                         {
                             CategoryId = 4,
-                            CreatedDateTime = new DateTime(2023, 4, 7, 14, 40, 50, 109, DateTimeKind.Local).AddTicks(6163),
+                            CreatedDateTime = new DateTime(2023, 4, 7, 13, 4, 57, 254, DateTimeKind.Local).AddTicks(4492),
                             DisplayOrder = 4,
                             Name = "Fruits"
                         },
                         new
                         {
                             CategoryId = 5,
-                            CreatedDateTime = new DateTime(2023, 4, 7, 14, 40, 50, 109, DateTimeKind.Local).AddTicks(6169),
+                            CreatedDateTime = new DateTime(2023, 4, 7, 13, 4, 57, 254, DateTimeKind.Local).AddTicks(4496),
                             DisplayOrder = 5,
                             Name = "Root Crops"
                         });
@@ -182,13 +184,6 @@ namespace Katabo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AccountType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("BillingAddressId")
                         .HasColumnType("int");
 
@@ -226,7 +221,7 @@ namespace Katabo.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
@@ -419,7 +414,7 @@ namespace Katabo.Migrations
                         {
                             UserId = 1,
                             AddressId = 2,
-                            Birthday = new DateTime(2023, 4, 7, 14, 40, 50, 109, DateTimeKind.Local).AddTicks(6463),
+                            Birthday = new DateTime(2023, 4, 7, 13, 4, 57, 254, DateTimeKind.Local).AddTicks(4665),
                             Email = "admin@admin.com",
                             FirstName = "admin",
                             Gender = "Male",
@@ -434,7 +429,7 @@ namespace Katabo.Migrations
                         {
                             UserId = 2,
                             AddressId = 1,
-                            Birthday = new DateTime(2023, 4, 7, 14, 40, 50, 109, DateTimeKind.Local).AddTicks(6479),
+                            Birthday = new DateTime(2023, 4, 7, 13, 4, 57, 254, DateTimeKind.Local).AddTicks(4672),
                             Email = "user@user.com",
                             FirstName = "user",
                             Gender = "Female",
@@ -451,7 +446,9 @@ namespace Katabo.Migrations
                 {
                     b.HasOne("Katabo.Models.User", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Katabo.Models.User", b =>

@@ -443,9 +443,11 @@ namespace Katabo.Controllers
 
 			var status = new string[] {"Unpaid","Paid","Delivered","Completed"};
 
+			var orderItems = _db.OrderItems.Where(oi => oi.OrderId == order.OrderId).ToList();
+
 			ViewBag.OrderStatus = status;
 			ViewBag.ShipmentAdd = address;
-
+			ViewBag.OrderItems = orderItems;
 			return View(order);
 		}
 
@@ -461,12 +463,21 @@ namespace Katabo.Controllers
 			else
 			{
 				isshipped= false;
+				StaticClass.SendSms("Your Order is being delivered, be sure to be at the delivery address to pickup your order"
+					,"+16476875884");
+			}
+
+			if(order.Status == "Completed")
+			{
+				StaticClass.SendSms("Your order is completed, thank you for ordering from KATABO - Borongan. Have a great day!"
+					, "+16476875884");
 			}
 
 			Order temp = new Order
 			{
 				OrderId = ord.OrderId,
-				UserId = ord.UserId,
+				AccountId = ord.AccountId,
+				AccountType = ord.AccountType,
 				Fullname = ord.Fullname,
 				OrderDate = ord.OrderDate,
 				TotalAmount = ord.TotalAmount,

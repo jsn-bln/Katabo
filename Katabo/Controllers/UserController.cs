@@ -193,7 +193,7 @@ namespace Katabo.Controllers
 
 			List<Address> adds = new List<Address>();
 
-			var orders = _db.Orders.Where(o => o.UserId == id).ToList();
+			var orders = _db.Orders.Where(o => o.AccountId == id).ToList();
 			
 			foreach(Order ord in orders)
 			{
@@ -212,7 +212,7 @@ namespace Katabo.Controllers
 					var client = new RestClient($"https://api.paymongo.com/v1/links/{paymentid}");
 					var request = new RestRequest(Method.GET);
 					request.AddHeader("accept", "application/json");
-					request.AddHeader("authorization", "Basic c2tfdGVzdF9EZWp4R1VtY3ZwNW1BTlZmemtERVRYQlc6");
+					request.AddHeader("authorization", "Basic c2tfdGVzdF9iMzdyemM2UUwzbnVDeTJabmRudGdqZEU6");
 					IRestResponse response = client.Execute(request);
 
 					var responseObject = JsonConvert.DeserializeObject<dynamic>(response.Content);
@@ -222,7 +222,8 @@ namespace Katabo.Controllers
 					Order temp = new Order
 					{
 						OrderId = order.OrderId,
-						UserId = order.UserId,
+						AccountId = order.AccountId,
+						AccountType = order.AccountType,
 						Fullname = order.Fullname,
 						OrderDate = order.OrderDate,
 						TotalAmount = order.TotalAmount,
