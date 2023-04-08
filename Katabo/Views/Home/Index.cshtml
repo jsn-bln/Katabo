@@ -4,7 +4,22 @@
 }
 
 
-<p></p>
+<style>
+    .card .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(128, 128, 128, 0.3);
+        z-index: 1;
+        border-radius: 3px;
+    }
+
+    .out-of-stock{
+        filter: grayscale(100%);
+    }
+</style>
 
 <div class="container" style="margin-bottom: 20px">
     <div class="row">
@@ -36,47 +51,67 @@
             {
                 <img class="img-fluid mx-auto" src="/root-crops-banner.png" />
             }
+            else if (ViewBag.CategorySelected == 6)
+            {
+                <img class="img-fluid mx-auto" src="/chicken-banner.png"/>
+            }
+            @if (Model.Count() <= 0)
+            {
+                <h3 class="text-muted m-3">No Products found</h3>
+            }
+            else
+            {
+                <header class="header" id="header">
+                    <br />
+                    <section class="section new-arrival">
+                        <div class="title">
+                            @if (ViewBag.CategorySelected == null)
+                            {
+                                <h3 class="text-muted m-2">All Products</h3>
 
-
-            <header class="header" id="header">
-                <br />
-                <section class="section new-arrival">
-                    <div class="title">
-                        @if(ViewBag.CategorySelected == null)
-                        {
-                            <h3 class="text-muted m-2">All Products</h3>
-                           
-                        }
-                        else{
-                            <h3 class="text-muted m-2">@ViewBag.CatName</h3>
-                        }
+                            }
+                            else
+                            {
+                                <h3 class="text-muted m-2">@ViewBag.CatName</h3>
+                            }
                         </div>
-                    <div class="d-flex flex-wrap product-items">
-                        @foreach (var obj in @Model)
-                        {
-                            <div class="card shadow text-center justify-content-center align-items-center mx-2 my-1 p-2" style="width: 180px; height:270px;">
-                                <img src="~/@obj.Image" alt="@obj.Name" class="prod-img" style="width: 100px; height : 100px" />
-                                <span style="font-weight: bold; color: #FFB802">@obj.Name</span>
-                                <span class="text-muted">₱@obj.Price</span>
-                                <br>
+                        <div class="d-flex flex-wrap product-items">
+                            @foreach (var obj in @Model)
+                            {
                                 @if (obj.ProductQuantity <= 0)
                                 {
-                                    <a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId"
-                                        class="btn btn-primary p-2 disabled" style="background: #28A745; margin-bottom: 10px; border-radius: 10px">Out of stock</a>
+                                    <div class="card shadow text-center justify-content-center align-items-center mx-2 my-1 p-2 position-relative" style="width: 180px; height:270px;">
+                                        <img src="~/@obj.Image" alt="@obj.Name" class="prod-img out-of-stock" style="width: 100px; height : 100px" />
+                                        <span style="font-weight: bold;" class="text-muted">@obj.Name</span>
+                                        <span class="text-muted">₱@obj.Price</span>
+                                        <br>
+                                        <a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId"
+                               class="btn btn-primary p-2 disabled text-light" style="background: #3B3B3B; margin-bottom: 10px; border-radius: 10px">Out of stock</a>
+                                        <div class="overlay"></div>
+                                    </div>
                                 }
                                 else
                                 {
-                                    <a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId" 
-                                        class="btn btn-primary p-2" style="background: #28A745; margin-bottom: 10px; border-radius: 10px">Add to Cart</a>
-
+                                    <div class="card shadow text-center justify-content-center align-items-center mx-2 my-1 p-2" style="width: 180px; height:270px;">
+                                        <img src="~/@obj.Image" alt="@obj.Name" class="prod-img" style="width: 100px; height : 100px" />
+                                        <span style="font-weight: bold; color: #FFB802">@obj.Name</span>
+                                        <span class="text-muted">₱@obj.Price</span>
+                                        <br>
+                                        <a asp-controller="Home" asp-action="Details" asp-route-id="@obj.ProductId"
+                               class="btn btn-primary p-2" style="background: #28A745; margin-bottom: 10px; border-radius: 10px">Add to Cart</a>
+                                    </div>
                                 }
-                            </div>
 
-                        }
 
-                    </div>
-                </section>
-            </header>
+
+                            }
+
+                        </div>
+                    </section>
+                </header>
+            }
+
+            
 
         </div>
     </div>

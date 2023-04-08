@@ -224,48 +224,37 @@ namespace Katabo.Controllers
 
 		public IActionResult AddCategory()
 		{
-			var cate = _db.Categories.ToList();
-			return View(cate);
+			ViewBag.Category = "text-black";
+			ViewBag.Home = "text-black";
+			ViewBag.AboutUs = "text-black";
+			ViewBag.Contact = "text-black";
+			ViewBag.AdminP = "isactive";
+
+
+			return View(new Category());
 		}
 
 		[HttpPost]
-		public IActionResult AddCategoryDB()
+		public IActionResult AddCategory(Category cat)
 		{
-			string name = Request.Form["name"];
-			string order = Request.Form["order"];
-			string fil = "";
-			Category ct = new Category
-			{
-				Name=name,
-				DisplayOrder=int.Parse(order),
-				CreatedDateTime=DateTime.Now
-			};
-
-			if (Request.Form.Files.Count > 0)
-			{
-				string fileName = Guid.NewGuid().ToString();
-				string wwwRootPath = _hostEnvironment.WebRootPath;
-				var uploads = Path.Combine(wwwRootPath, @"Images");
-				IFormFile file = Request.Form.Files[0];
-				var extension = Path.GetExtension(file.FileName);
-
-
-				fil = "images\\" + fileName + extension;
-				using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
-				{
-					file.CopyTo(fileStreams);
-				}
-			}
-			_db.Add(ct);
+			cat.CreatedDateTime = DateTime.Now;
+			_db.Add(cat);
 			_db.SaveChanges();
-			return RedirectToAction("AddCategory");
+			return RedirectToAction("Categories","Adminpanel");
 		}
-		public IActionResult DeleteCate(int cateid)
+		public IActionResult DeleteCategory(int id)
 		{
-			var cate = _db.Categories.Where(x => x.CategoryId == cateid).FirstOrDefault();
-			_db.Remove(cate);
+			var cat = _db.Categories.Where(x => x.CategoryId == id).FirstOrDefault();
+			var prod = _db.Products.Where(prod => prod.CategoryId == cat.CategoryId).ToList();
+
+			if (prod.Count() > 0)
+			{
+				_toastNotification.AddErrorToastMessage("Cannot delete category because it is actively being used!");
+				return RedirectToAction("Categories", "Adminpanel");
+			}
+			_db.Categories.Remove(cat);
 			_db.SaveChanges();
-			return RedirectToAction("AddCategory");
+			return RedirectToAction("Categories","Adminpanel");
 		}
 
 

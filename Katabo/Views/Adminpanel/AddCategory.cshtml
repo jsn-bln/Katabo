@@ -1,75 +1,21 @@
-﻿@model IEnumerable<Category>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Category
+
 @{
+	ViewData["Title"] = "Add Category";
 }
-<style>
-    table,
-    td {
-        border: 1px solid #333;
-    }
 
-    thead,
-    tfoot {
-        background-color: #333;
-        color: #fff;
-    }
 
-</style>
-<link href="~/css/shoppingcartstyle.css" rel="stylesheet" />
-
-<h4>Add Category</h4>
-<br />
-<div class="row">
-    <div class="col-4">
-        <div class="map-content">
-            <form id="account" method="post" asp-action="AddCategoryDB" enctype="multipart/form-data">
-                <div class="twice">
-
-                    <input name="name" class="form-control" autocomplete="username" aria-required="true" placeholder="Name" required />
-                    <label  class="form-label">Name</label>
-                    <span class="text-danger"></span>
-                </div>
-
-                <div class="twice">
-                    <input type="number" name="order" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Display Order" required />
-                    <label class="form-label">Order</label>
-                    <span asp-for="Password" class="text-danger"></span>
-                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Create</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<br />
-
-<table id="customers">
-    <tr>
-           <th></th>
-        <th>Name</th>
-        <th>Display Order</th>
-
- 
-     
-        <th></th>
-    </tr>
-    @foreach (var obj in Model)
-    {
-        <tr>        
-            <td style="text-align: right;">@obj.Name</td>
-            <td style="text-align: right;">@obj.DisplayOrder </td>
-     
-            <td>
-                <a asp-action="DeleteCate" asp-route-cateid="@obj.CategoryId" class="btn btn-danger">Delete</a>
-
-            </td>
-        </tr>
-    }
-
-</table>
-<br />
-<br />
-<div>
-    @* <a asp-page="Checkout" class="btn btn-primary">Check Out</a>*@
+<div class="container">
+	<div class="row">
+		<div class="card p-3 w-50 mx-auto">
+			<h3 class="card-title" style="color: #28A745">Add a new Category!</h3>
+			<hr />
+			<form asp-controller="Adminpanel" asp-action="AddCategory" method="post" class="text-muted">
+				<label asp-for="Name" class="form-label m-1">Category Name</label>
+				<input asp-for="Name" class="form-control m-1" type="text"/>
+				<button type="submit" class="btn text-light m-1" style="background: #28A745">Add</button>
+			</form>
+		</div>
+		
+	</div>
 </div>

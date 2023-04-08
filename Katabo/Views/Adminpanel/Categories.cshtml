@@ -27,11 +27,19 @@
 		</div>
 		<div class="col-sm-10">
 			<div class="card p-3">
+				<div class="d-flex justify-content-between">
+					<h3 class="card-title" style="color #28A745:">Categories</h3>
+					<div class="btn" style="background: #28A745">
+						<i class="bi bi-plus-circle text-light"></i>
+						<a asp-controller="Adminpanel" asp-action="AddCategory" class="text-light text-decoration-none">Add Category</a>
+					</div>
+				</div>
 				<table class="table">
 					<thead>
 						<tr>
 							<th style="color: #28A745">Id</th>
 							<th style="color: #28A745">Product name</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -43,6 +51,10 @@
 								   class="text-muted">@cat.CategoryId</a>
 								</td>
 								<td>@cat.Name</td>
+								<td>
+									<i class="bi bi-trash" style="color: #D11A2A"></i>
+									<a asp-controller="Adminpanel" asp-action="DeleteCategory" asp-route-id="@cat.CategoryId" class="text-decoration-none" style="color: #D11A2A">Delete</a>
+								</td>
 							</tr>
 						}
 					</tbody>
